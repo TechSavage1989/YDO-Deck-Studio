@@ -38,12 +38,12 @@ jobs:
           path: dist/*
           if-no-files-found: error
       - name: Refuse tag release without build artifacts
-        if: startsWith(github.ref, 'refs/tags/v') && ${{ hashFiles('dist/*') == '' }}
+        if: ${{ startsWith(github.ref, 'refs/tags/v') && hashFiles('dist/*') == '' }}
         run: |
           echo "Release build requires the verified recovered rc189 baseline executable." >&2
           exit 1
       - name: Create immutable GitHub release
-        if: startsWith(github.ref, 'refs/tags/v') && ${{ hashFiles('dist/*') != '' }}
+        if: ${{ startsWith(github.ref, 'refs/tags/v') && hashFiles('dist/*') != '' }}
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
