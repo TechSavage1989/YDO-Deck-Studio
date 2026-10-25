@@ -117,4 +117,9 @@ At rc236 development start, the public repository had no Releases. Until a relea
 
 ## Initial public source import
 
-The project owner explicitly authorized pushing the initial source and relevant handoff/build information to the public repository. The initial Git source import includes maintained browser source, launcher/updater source, tests, build scripts, documentation, workflows, changelogs, validation notes, and text-based assets. The recovered rc189 native baseline executable is not stored in Git by this automated import; base/BASELINE_SHA256.txt is authoritative for validating a separately supplied baseline.
+The project owner explicitly authorized pushing the initial source and relevant handoff/build information to the public repository. The initial Git source import includes the rc236 launcher/updater source, updater tests, build/release scripts, documentation, handoff files, changelog, workflow, and baseline digest. The complete maintained browser source, web binary assets, and recovered rc189 native baseline remain in the delivered rc236 Source ZIP because the connected GitHub write interface used for this import cannot stream those large local files directly. Do not treat the Git checkout alone as a complete recovered-source build until those files are synchronized through a normal Git file transfer. base/BASELINE_SHA256.txt remains authoritative for validating the separately supplied recovered baseline.
+
+
+## Git import completeness
+
+Current GitHub `main` is the authoritative handoff for project ownership, versioning, launcher/updater work, and update architecture. The delivered rc236 Source ZIP remains the authoritative complete recovered-source snapshot for the browser tree and binary assets until a normal Git binary/source synchronization is performed. Future work must not reconstruct missing browser files from guesses or older versions.
