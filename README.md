@@ -2,7 +2,7 @@
 
 YGO Deck Studio is a Windows desktop deck-building and integrated test-duel application.
 
-The current recovered-source development line preserves the existing native application core and browser UI while adding a source-controlled stable launcher and safe GitHub Releases update path.
+The current recovered-source development line preserves the existing native application core and browser UI while adding a source-controlled stable launcher and safe GitHub Releases update path. The initial Git import contains the launcher/updater and project handoff; the complete rc236 recovered browser/source snapshot is tracked by digest in SOURCE_SNAPSHOT.md until a normal large-file Git synchronization is performed.
 
 Read AGENTS.md before development and DEVELOPMENT_HANDOFF.md before continuing work from another chat or environment.
 
