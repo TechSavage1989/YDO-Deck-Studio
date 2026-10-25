@@ -2,19 +2,21 @@
 
 ## Latest version
 
-3.0.0-alpha.221-duelcore.1-rc236
+3.0.0-alpha.221-duelcore.1-rc237
 
-Previous confirmed working baseline used for this release: 3.0.0-alpha.221-duelcore.1-rc235.
+Previous published baseline: 3.0.0-alpha.221-duelcore.1-rc236. Native Windows install and restart confirmation is pending the owner's updater test.
 
 ## Source and repository state
 
 Repository: https://github.com/TechSavage1989/YDO-Deck-Studio
 
-Repository visibility observed during rc236 work: public.
+Repository visibility: public. Source parent: a7bf25427186121c0702839042592fb89ffa4279.
 
-At the start of rc236 work the repository contained only the initial main-branch commit and no application files, AGENTS.md, DEVELOPMENT_HANDOFF.md, or GitHub Releases. Therefore rc235 from the supplied source package was the newest confirmed application source and was used as the development baseline.
+RC237 is the next pre-release for testing the published rc236 updater. The only product change is a full installed-version label in the Help window. The complete rc236 Source ZIP was verified against SHA-256 868e11a581aaaf962eb6e61505d8a836d78518099446962321da2f1e860f64be before continuing.
 
-RC236 is the initial application source baseline authorized for publication to the repository main branch. Confirm the current main-branch head and GitHub Releases state before future work. GitHub Releases remain a separate publication step and are not implied by a source push.
+Two errors in the earlier Git text import were restored from that verified package: Windows helper command quoting and release-note newline parsing. These corrections preserve the released rc236 behavior. RC236 release assets are unchanged.
+
+Use the current complete Source ZIP identified in SOURCE_SNAPSHOT.md for the recovered baseline and unchanged web dependencies and artwork. Git records the updated browser entry points, launcher/updater, build tooling, tests, and handoff files. Confirm branch and release state before future changes.
 
 ## Architecture
 
@@ -101,9 +103,11 @@ The release builder:
 
 ## Native validation status
 
-The rc236 launcher is cross-compiled as a Windows amd64 GUI PE and its candidate executable is parsed and validated by the updater tests. This development environment cannot launch Windows GUI executables, so full native Windows launch, visible-window health, target-drive replacement, shortcut behavior, and automatic rollback were not executed locally.
+RC237 is built as a Windows amd64 GUI PE. The release build runs JavaScript syntax checks, Go updater checks, focused Chromium regressions, and validation of the exact generated launcher. See DUELCORE_VALIDATION_alpha221_duelcore1_rc237.txt for the recorded results.
 
-The prepared GitHub Actions workflow includes artifact builds and a Windows smoke job, but hosted CI cannot be considered verified until the workflow is actually committed and runs in the repository.
+This Linux environment cannot execute the native Windows GUI, replace a running Windows launcher, or verify Windows process restart, shortcut behavior, visible-window health confirmation, or rollback. Those checks remain pending the owner's test from rc236.
+
+The repository workflow can run source checks without the recovered binary baseline. A tag workflow cannot build release artifacts unless the verified baseline is supplied; manual publication of the prepared assets is separate from hosted build status.
 
 ## Security limitations
 
@@ -113,13 +117,22 @@ The update helper is copied to per-user application data only for an explicit in
 
 ## Known release-state limitation at handoff
 
-At rc236 development start, the public repository had no Releases. Until a release containing update-manifest.json and the matching executable is published, the app correctly reports that the update feed has no published application release. It must not report this condition as "up to date."
+RC236 is published as v3.0.0-alpha.221-duelcore.1-rc236, with six matching release assets. Its original updater client successfully queried the public release feed, fetched the manifest, downloaded and validated the executable, and reused the feed through HTTP 304.
+
+RC237 uses tag v3.0.0-alpha.221-duelcore.1-rc237 and must be published with its exact manifest and executable. Verify live release discovery and download using the unchanged rc236 updater after publication. Do not interpret source publication or a tag alone as a successful release.
+
+Owner test: launch the existing rc236 application, use Check for Updates, select Download, then Install and restart after saving any deck and ending any active duel. Open Help with F1 and confirm the version ends in rc237. Record actual Windows results before claiming replacement or rollback passed.
 
 ## Initial public source import
 
-The project owner explicitly authorized pushing the initial source and relevant handoff/build information to the public repository. The initial Git source import includes the rc236 launcher/updater source, updater tests, build/release scripts, documentation, handoff files, changelog, workflow, and baseline digest. The complete maintained browser source, web binary assets, and recovered rc189 native baseline remain in the delivered rc236 Source ZIP because the connected GitHub write interface used for this import cannot stream those large local files directly. Do not treat the Git checkout alone as a complete recovered-source build until those files are synchronized through a normal Git file transfer. base/BASELINE_SHA256.txt remains authoritative for validating the separately supplied recovered baseline.
+The original initial Git import contained launcher/updater source, tests, build scripts, documentation, workflow, and baseline digest. Browser entry points and focused browser tests are added for rc237. The complete recovered tree, including unchanged browser dependencies, artwork, and the original rc189 executable, is included in the versioned Source ZIP.
 
+The native baseline remains excluded from Git by .gitignore. Validate base/BASELINE_SHA256.txt before use. Do not replace it with an unverified executable.
 
 ## Git import completeness
 
-Current GitHub `main` is the authoritative handoff for project ownership, versioning, launcher/updater work, and update architecture. The delivered rc236 Source ZIP remains the authoritative complete recovered-source snapshot for the browser tree and binary assets until a normal Git binary/source synchronization is performed. Future work must not reconstruct missing browser files from guesses or older versions.
+The current Git branch is authoritative for project ownership, versions, changed browser entry points, launcher/updater, and handoff documentation. The complete release Source ZIP is authoritative for the recovered-source tree as a whole. Use its release checksums; do not reconstruct missing files from guesses or older packages.
+
+Python browser test dependencies are listed in requirements-dev.txt. Install them and run python -m playwright install chromium before building. The focused tests use Playwright's installed Chromium instead of a fixed Linux-only browser path.
+
+For an existing Chromium installation, set YGO_CHROMIUM_EXECUTABLE to its full executable path before running the build or focused browser tests.

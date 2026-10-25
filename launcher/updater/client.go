@@ -262,7 +262,7 @@ func retryUntil(resp *http.Response, now time.Time) time.Time {
 
 func hasAdditionalReleaseContent(body string, notes []string) bool {
 	lines := []string{}
-	for _, line := range strings.Split(body, "\\n") {
+	for _, line := range strings.Split(body, "\n") {
 		s := strings.TrimSpace(strings.TrimLeft(line, "#-*• "))
 		if s != "" {
 			lines = append(lines, strings.ToLower(s))

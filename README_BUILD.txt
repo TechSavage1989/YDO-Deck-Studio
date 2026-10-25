@@ -1,18 +1,22 @@
-YGO DECK STUDIO 3 RC236 - RECOVERED SOURCE AND BUILD PACKAGE
+YGO DECK STUDIO 3 RC237 - RECOVERED SOURCE AND BUILD PACKAGE
 
 PACKAGE STATUS
 
 The original native Go project source for the rc189 application shell was not recovered. This package contains the maintained browser source, the verified rc189 native baseline used for local builds, the reproducible embedded-web patcher, and the new source-controlled Windows launcher/updater.
 
-The preserved rc189 core remains authoritative for the native application shell and OCGCore integration. Browser-side changes through rc236 are under web/. The rc236 launcher adds the stable portable filename and safe GitHub Releases update path.
+The preserved rc189 core remains authoritative for the native application shell and OCGCore integration. Browser-side changes through rc237 are under web/. The rc237 launcher adds the stable portable filename and safe GitHub Releases update path.
 
-REBUILDING RC236
+REBUILDING RC237
 
 Windows:
   py -3 scripts\build_release.py --out dist
 
 Linux/macOS development environments with Go, Python, Node, and Chromium/Playwright available:
   python3 scripts/build_release.py --out dist
+
+Install browser test dependencies before building:
+  python -m pip install -r requirements-dev.txt
+  python -m playwright install chromium
 
 The build verifies the rc189 baseline SHA-256, patches the maintained embedded web files, runs focused tests, cross-builds the Windows launcher, validates the generated candidate, and creates standalone/portable/source/update-manifest/checksum artifacts.
 
@@ -32,3 +36,5 @@ Expected feed:
   GitHub Releases from the same repository.
 
 A release intended for auto-update must include update-manifest.json and the exact versioned launcher executable named by that manifest. Update installation remains explicit; the app never downloads or restarts automatically.
+
+For an existing Chromium installation, set YGO_CHROMIUM_EXECUTABLE to its full executable path before running the build or focused browser tests.

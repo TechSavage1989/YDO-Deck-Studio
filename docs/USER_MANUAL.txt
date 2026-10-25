@@ -1,0 +1,113 @@
+YGO DECK STUDIO 3
+Version 3.0.0-alpha.221-duelcore.1-rc237
+
+STARTING THE APPLICATION
+
+Run "YGO Deck Studio 3.exe" from any writable folder. The application is portable, but it stores its card database, duel rules package, browser profile, preferences, recent deck history, and Deck Library directory permissions in its application data location.
+
+STARTING A TEST DUEL
+
+1. Load or build the player deck.
+2. Select Test Duel.
+3. Configure the three sections on the Start Test Duel screen:
+   - Practice Dummy Intelligence: Passive, Casual, Competitive, or Expert.
+   - Turn Order: You Go First, Dummy Goes First, or Random.
+   - Practice Dummy Deck: Clone Current Deck, a recent deck, a deck from a configured directory, or Other Location.
+4. Select Start Duel.
+
+The recent and configured directory lists are deduplicated. When the same deck appears in both locations, one entry is shown.
+
+The selected Practice Dummy deck name is kept inside its summary box. A name that is too long for the available width is shortened visually with an ellipsis. Pause the pointer over the name to view the complete selection.
+
+Normal intelligence, turn-order, and deck selections update immediately without rebuilding the setup window. Folder and file operations display Opening or Refreshing feedback while the application performs the slower operation.
+
+
+RESETTING THE CURRENT DUEL
+
+Select Reset Duel from the lower-right playmat control, or open Duel Configuration and choose Reset Duel, to immediately create a fresh duel with the same captured setup:
+
+- Player deck
+- Practice Dummy deck
+- Practice Dummy intelligence and strategy settings
+- Actual first player
+- Duel format and banlist
+- Match and legality settings
+
+The duel state is recreated from the beginning. Life Points, hands, fields, Graveyards, banished cards, prompts, Chains, animations, logs, turn state, replay state, and Dummy decision state do not carry into the reset duel. Decks are freshly initialized and shuffled by the Rules Engine.
+
+CARD-SELECTION PROMPTS
+
+Fixed-count card-selection prompts use rolling selection behavior. If only one card may be selected, choosing another eligible card automatically replaces the current selection. If multiple cards may be selected, choosing another card after the maximum has been reached removes the oldest optional selection and adds the new card. Required materials are never removed automatically. Selecting an already-selected optional card still deselects it normally.
+
+This behavior applies to fixed-limit selection prompts and inline selection surfaces. Dynamic OCGCore material-selection prompts that do not expose a fixed numeric maximum remain engine-controlled.
+
+DECK SHUFFLE PRESENTATION
+
+When the Rules Engine confirms a real Deck shuffle after duel setup, the Deck zone plays a short vertical card shuffle animation. If Duel Sound is enabled, the approved fast card-flip shuffle sound plays at the current SFX volume. Both player and Practice Dummy Deck shuffles use the same presentation. Replay-seek reconstruction suppresses the shuffle presentation while it rebuilds state silently.
+
+USING REPLAY PLAYBACK AND LIVE HISTORY
+
+Select Replay from the duel top bar to open replay controls. Replay playback can be paused or resumed, and the timeline can be dragged through recorded decision positions. The field seeks while the timeline is being moved. Forward replay seeking advances the current deterministic replay engine when possible; backward seeking reconstructs state from the recorded seed when required. Pre-target reconstruction presentation is suppressed. Any manual seek pauses at the selected position.
+
+During an active Test Duel, the same timeline can be used to move backward through the duel's live recorded history. When the seek finishes, the selected duel state becomes live again rather than remaining ordinary playback. The already-recorded future is preserved until the duel actually branches.
+
+If you make a new player decision from the restored point, all decisions and replay events after that point are discarded while the earlier history is retained. The new action becomes the next decision in the retained timeline. An explicit player action creates the branch even if it matches the action that was originally recorded. Automatic decisions that exactly match the preserved future can advance without destroying it; a differing automatic decision creates a branch because the duel state has changed.
+
+If a live-history seek stops at a Practice Dummy decision, Replay shows Continue and remains paused until Continue is selected. If it stops at a player decision, the player decision prompt is restored so you can immediately choose the new action.
+
+Starting, restarting, or resetting a duel terminates any active replay or live-history branch state so old replay actions cannot continue in the background.
+
+CONFIGURING DECK DIRECTORIES
+
+1. Open the File menu.
+2. Select Deck Library Directories.
+3. Select Add Directory.
+4. Choose a folder and grant read access.
+5. The folder and its subfolders are scanned for supported deck files.
+
+The configured folder handles are saved in the application's browser profile and restored on later launches. Use Refresh to rescan a folder, Refresh All to rescan all folders, Remove to stop indexing a folder, or Reconnect when the browser requires permission again.
+
+The library currently scans these file types:
+
+- YDK
+- YDKE
+- TXT
+- MD
+- LIST
+- DECK
+- CSV
+- TSV
+
+Scanning safeguards:
+
+- Up to 2,500 recognized deck files
+- Up to 12 nested directory levels
+- Up to 4 MB per deck file
+
+Unavailable, renamed, disconnected, or permission-restricted directories remain listed without preventing the application from opening. Reconnect or remove the affected directory from Deck Library Directories.
+
+SELECTING A DUMMY DECK FROM ANOTHER LOCATION
+
+On the Start Test Duel screen, select Other Location and choose a supported deck file. This selection is used for the Practice Dummy without replacing the player deck currently loaded in the builder.
+
+APPLICATION DATA
+
+Use File - Open Application Data Folder to access downloaded card data, duel rules packages, cached scripts, browser data, and related application files.
+
+TROUBLESHOOTING
+
+- If a configured folder shows that access is required, select Reconnect.
+- If new or changed deck files are not listed, select Refresh Library or Refresh All.
+- If the directory chooser is unavailable, update Microsoft Edge and the Microsoft Edge WebView2 Runtime.
+- If the duel rules package is unavailable, open Simulator settings and refresh or update the Duel Rules Package.
+- Keep independent backups of important deck files.
+
+RC215 HAND / FIELD CARD SELECTION MODE
+
+Open Duel Configuration > Interface Settings > Prompts and Interaction and use "Hand / Field Card Selection".
+
+- Prompt Window: default behavior. OCGCore card choices are shown in the standard selection prompt.
+- Direct Hand / Field: when every legal candidate is physically visible in your hand or on either field, those exact cards are highlighted and can be selected directly on the duel board.
+- If any candidate is in the Deck, Graveyard, Banished zone, Extra Deck, or a hidden opponent-hand location, Deck Studio automatically uses the standard prompt for that decision.
+- Direct mode uses the same rolling selection behavior as prompt mode. When the maximum is full, selecting another optional card removes the oldest optional selection. Required materials are never automatically removed.
+- Click a selected optional card again to deselect it. Use the separate Details button to inspect a selectable card without changing the selection.

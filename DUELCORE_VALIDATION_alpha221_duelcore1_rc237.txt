@@ -1,0 +1,66 @@
+YGO DECK STUDIO 3
+RELEASE BUILD VALIDATION REPORT
+Version: v3.0.0-alpha.221-duelcore.1-rc237
+
+BASELINE
+
+Repository: https://github.com/TechSavage1989/YDO-Deck-Studio
+Git parent: a7bf25427186121c0702839042592fb89ffa4279
+Previous published release: v3.0.0-alpha.221-duelcore.1-rc236
+Verified complete rc236 source ZIP SHA-256: 868e11a581aaaf962eb6e61505d8a836d78518099446962321da2f1e860f64be
+Recovered rc189 native baseline SHA-256: d1a91e2c53d9bb18472da91b28c5b92069dedfd70d8b2b41dc265c392936febf
+Published rc236 artifacts are preserved unchanged.
+
+PRODUCT CHANGE
+
+The Help window subtitle now displays the full installed build version:
+Version 3.0.0-alpha.221-duelcore.1-rc237
+
+The browser branch marker, import cache keys, updater health/version marker, native core version, and launcher version are updated consistently to rc237.
+
+BUILD MAINTENANCE
+
+Restored Windows helper command quoting and release-note newline parsing from the verified rc236 source package after identifying errors in the earlier Git text import. Those corrections preserve the released rc236 behavior.
+
+Browser tests support Playwright's installed Chromium or YGO_CHROMIUM_EXECUTABLE. Tests used Playwright 1.64.1 with Chromium 153.0.8010.0. The simulated update service now retains downloaded state during periodic checks, and browser assertions wait for the expected state instead of assuming fixed request durations.
+
+PASSED CHECKS
+
+PASS - recovered native baseline SHA-256 verification
+PASS - fixed native embed allocation and original embedded compiler hashes verified before patching
+PASS - JavaScript syntax: web/js/app.js
+PASS - JavaScript syntax: web/js/duel-core.js
+PASS - Go updater version comparison, ETag/304, and rate-limit/error handling tests
+PASS - real Chromium startup and periodic updater checks
+PASS - real Chromium focus-return checks and update progress presentation
+PASS - unsaved-deck restart guard
+PASS - active-duel restart guard
+PASS - explicit install request only after guards clear
+PASS - update service errors are not reported as up to date
+PASS - named-identity legality explanation regression
+PASS - shared Extra Monster Zone mapping and occupancy regression
+PASS - Xyz Material routing, detach semantics, and final Chain display regression
+PASS - visual Duel Log event/card click routing regression
+PASS - exact material auto-submit regression
+PASS - Windows amd64 GUI launcher compilation
+PASS - exact built candidate download, SHA-256, size, PE architecture, app identity and version validation
+PASS - wrong application identity rejection
+PASS - Help version label is present in the patched native core payload
+
+ARTIFACT INTEGRITY
+
+Executable: YGO_Deck_Studio_3_v3.0.0-alpha.221-duelcore.1-rc237_Chat.exe
+Size: 25501696 bytes
+SHA-256: 401ffea65d28252b8914cb777c3934ffab2a9e12b73eb2e38d40d96dcff0fe2c
+
+update-manifest.json is derived from this exact executable. The portable ZIP contains the identical bytes under YGO Deck Studio 3.exe. The Source ZIP includes the complete recovered-source tree and this report. Use CHECKSUMS_SHA256_alpha221_duelcore1_rc237.txt to verify the release assets.
+
+PUBLICATION AND WINDOWS TEST SCOPE
+
+This is the build-time validation report. After publication, verify all six release assets and run the unchanged rc236 updater client against the public feed to confirm rc237 discovery and candidate download validation.
+
+This Linux environment cannot execute the Windows GUI, replace a running Windows launcher on NTFS, validate shortcuts, or confirm actual Windows restart, visible-window health, and rollback behavior. Those native checks remain pending the owner's rc236 to rc237 test. Binaries remain unsigned.
+
+OWNER TEST
+
+Launch the existing rc236 application, use Check for Updates, select Download, then Install and restart. Save any deck changes and end an active duel first. After restart, press F1 and confirm the Help version ends in rc237. Existing settings and decks should remain available.

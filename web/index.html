@@ -1,0 +1,1091 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <title>YGO Deck Studio 3</title>
+  <link rel="icon" type="image/png" href="assets/app_icon.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css?v=3.0.0-alpha.221" />
+  <link rel="stylesheet" href="duel-core.css?v=3.0.0-alpha.221-duelcore.1-rc237" />
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="deck-identity">
+          <input id="deckName" class="deck-name" value="Untitled Deck" aria-label="Deck name" />
+          <span id="saveState" class="save-state">Saved locally</span>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button class="btn ghost" id="newDeckBtn">New</button>
+        <button class="btn ghost" id="openDeckBtn" title="Open a YDK, YDKE, or readable deck file">Open</button>
+        <button class="btn ghost" id="saveDeckBtn" title="Save the current deck to its opened file, or choose a file on first save">Save</button>
+        <div id="recentDeckMenu" class="modern-menu recent-deck-menu">
+          <button class="btn ghost app-menu-button" id="recentDeckBtn" type="button" aria-haspopup="menu" aria-expanded="false" title="Open a recently used deck"><span>Recent</span><span aria-hidden="true">▾</span></button>
+          <div id="recentDeckPanel" class="modern-menu-panel recent-deck-panel" role="menu" aria-label="Recent decks">
+            <div class="modern-menu-header">
+              <div><strong>Recent Decks</strong><span>Recently opened deck files</span></div>
+              <button id="closeRecentDeckBtn" class="icon-btn" type="button" aria-label="Close recent decks menu">×</button>
+            </div>
+            <div id="recentDeckList" class="recent-deck-list"></div>
+          </div>
+        </div>
+        <button class="btn ghost draw5-btn" id="handBtn" title="Draw a random five-card opening hand from the Main Deck" aria-label="Draw 5"><span class="draw5-icon" aria-hidden="true"><img src="assets/draw5_hand_icon.png" alt="" class="draw5-icon-img" /></span><span class="sr-only">Draw 5</span></button>
+        <button class="btn ghost test-duel-btn" id="testDuelBtn" type="button" title="Start an integrated practice duel">Test Duel</button>
+        <div id="appCommandMenu" class="modern-menu">
+          <button class="btn ghost app-menu-button" id="appMenuBtn" type="button" aria-haspopup="menu" aria-expanded="false" title="Open application commands"><span class="menu-bars" aria-hidden="true">≡</span><span>Menu</span></button>
+          <div id="appMenuPanel" class="modern-menu-panel" role="menu" aria-label="Application commands">
+            <div class="modern-menu-header">
+              <div><strong>Application Menu</strong><span>Deck, view, database, and file commands</span></div>
+              <button id="closeAppMenuBtn" class="icon-btn" type="button" aria-label="Close application menu">×</button>
+            </div>
+            <div class="modern-menu-grid">
+              <section class="modern-menu-section">
+                <h3>File</h3>
+                <button role="menuitem" data-menu-action="new"><span>New Deck</span><kbd>Ctrl+N</kbd></button>
+                <button role="menuitem" data-menu-action="open"><span>Open Deck...</span><kbd>Ctrl+O</kbd></button>
+                <button role="menuitem" data-menu-action="save"><span>Save Deck</span><kbd>Ctrl+S</kbd></button>
+                <button role="menuitem" data-menu-action="import-clipboard"><span>Import Clipboard</span><kbd>Ctrl+Shift+V</kbd></button>
+                <button role="menuitem" data-menu-action="export-ydk"><span>Export YDK...</span></button>
+                <button role="menuitem" data-menu-action="export-ydke"><span>Export YDKE...</span></button>
+                <button role="menuitem" data-menu-action="save-readable"><span>Export Readable List...</span></button>
+              </section>
+              <section class="modern-menu-section">
+                <h3>Deck</h3>
+                <button role="menuitem" data-menu-action="undo" disabled><span>Undo</span><kbd>Ctrl+Z</kbd></button>
+                <button role="menuitem" data-menu-action="redo" disabled><span>Redo</span><kbd>Ctrl+Y</kbd></button>
+                <button role="menuitem" data-menu-action="draw5"><span>Draw 5</span></button>
+                <button role="menuitem" data-menu-action="test-duel"><span>Test Duel</span></button>
+                <button role="menuitem" data-menu-action="copy-ydk"><span>Copy YDK</span></button>
+                <button role="menuitem" data-menu-action="copy-ydke"><span>Copy YDKE</span></button>
+                <button role="menuitem" data-menu-action="sort"><span>Apply Current Sort</span></button>
+                <button role="menuitem" data-menu-action="remove-selected"><span>Remove Selected Card</span><kbd>Delete</kbd></button>
+                <button role="menuitem" data-menu-action="clear-deck"><span>Clear Deck</span></button>
+              </section>
+              <section class="modern-menu-section">
+                <h3>View</h3>
+                <button role="menuitem" data-menu-action="toggle-search"><span>Show / Hide Search</span></button>
+                <button role="menuitem" data-menu-action="toggle-details"><span>Show / Hide Card Details</span></button>
+                <button role="menuitem" data-menu-action="swap-panels"><span>Swap Side Panels</span></button>
+                <button role="menuitem" data-menu-action="restore-layout"><span>Restore Default Layout</span></button>
+                <details class="view-icon-tools-submenu">
+                  <summary>Icon Tools</summary>
+                  <div class="view-icon-tools-submenu-body">
+                    <button role="menuitem" data-menu-action="link-arrow-tools"><span>Link Arrow Tools...</span></button>
+                    <button role="menuitem" data-menu-action="attribute-icon-tools"><span>Attribute Icon Tools...</span></button>
+                    <button role="menuitem" data-menu-action="restriction-badge-tools"><span>Restriction Badge Tools...</span></button>
+                    <button role="menuitem" data-menu-action="open-icon-tuning-folder"><span>Open Icon Tuning Folder</span></button>
+                  </div>
+                </details>
+                <button role="menuitem" data-menu-action="theme"><span>Toggle Theme</span></button>
+                <button role="menuitemcheckbox" aria-checked="true" data-menu-action="toggle-card-text-styling" title="Disable bold and colored card-text emphasis"><span>Card Text Styling</span><kbd data-card-text-styling-status>On</kbd></button>
+              </section>
+              <section class="modern-menu-section">
+                <h3>Database & Help</h3>
+                <button role="menuitem" data-menu-action="refresh-db"><span>Refresh Cards &amp; Rules</span></button>
+                <button role="menuitem" data-menu-action="open-data"><span>Open Application Data Folder</span></button>
+                <button role="menuitem" data-menu-action="help"><span>Help &amp; Documentation</span><kbd>F1</kbd></button>
+                <button role="menuitem" data-menu-action="exit"><span>Exit</span><kbd>Alt+F4</kbd></button>
+              </section>
+            </div>
+          </div>
+        </div>
+        <div id="websiteCommandMenu" class="modern-menu website-command-menu">
+          <button class="btn ghost app-menu-button" id="websiteMenuBtn" type="button" aria-haspopup="menu" aria-expanded="false" title="Open website integrations"><span>Web</span><span aria-hidden="true">▾</span></button>
+          <div id="websiteMenuPanel" class="modern-menu-panel website-menu-panel" role="menu" aria-label="Website integrations">
+            <div class="modern-menu-header">
+              <div><strong>Website Integration</strong><span>Open this deck with supported external deck tools</span></div>
+              <button id="closeWebsiteMenuBtn" class="icon-btn" type="button" aria-label="Close website integration menu">×</button>
+            </div>
+            <div class="website-menu-grid">
+              <button data-handoff="ygoprodeck" class="btn compact ghost" role="menuitem">YGOPRODeck</button>
+              <button data-handoff="duelingbook" class="btn compact ghost" role="menuitem">DuelingBook</button>
+              <button data-handoff="duelingnexus" class="btn compact ghost" role="menuitem">Dueling Nexus</button>
+              <button data-handoff="konami" class="btn compact ghost" role="menuitem">Konami / Neuron</button>
+            </div>
+          </div>
+        </div>
+        <button class="icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">◐</button>
+        <button class="icon-btn" id="helpBtn" title="Help and About" aria-label="Help and About">?</button>
+      </div>
+    </header>
+
+    <div class="workspace" id="workspace">
+      <aside id="searchPanel" class="panel search-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Card Search</h2>
+            <p id="dbStatus">Loading card database…</p>
+          </div>
+          <div class="heading-actions">
+            <button id="refreshDbBtn" class="icon-btn" title="Refresh cards, live banlists, and card pools">↻</button>
+          </div>
+        </div>
+
+        <div id="searchPanelBody" class="collapsible-body search-panel-body">
+          <div class="search-box-wrap">
+            <input id="searchInput" class="search-input" placeholder="Search card name, archetype, or text" autocomplete="off" />
+            <button id="clearSearchBtn" class="search-clear" aria-label="Clear search">×</button>
+          </div>
+          <div id="searchFiltersBody" class="search-filter-body search-filter-compact">
+            <div class="search-filter-menu-label">
+              <span class="search-filter-label-text">Search Options</span>
+              <button id="searchFilterBtn" class="btn compact search-filter-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="searchFilterPopover"><span id="searchFilterSummary">Relevance · TCG · All Cards</span></button>
+              <div id="searchFilterPopover" class="search-filter-popover hidden" role="dialog" aria-label="Search options">
+                <div class="search-filter-popover-heading">
+                  <div><strong>Search Options</strong></div>
+                  <div class="search-filter-heading-actions"><button id="pinSearchFilterPopoverBtn" type="button" class="btn compact ghost drawer-pin-btn" aria-pressed="false" title="Keep Search Options open while working with results">Pin</button><button id="dockSearchFilterPopoverBtn" type="button" class="btn compact ghost drawer-dock-btn" aria-pressed="true" title="Undock Search Options into a movable window">Undock</button><button id="closeSearchFilterPopoverBtn" class="icon-btn compact-icon" type="button" aria-label="Close Search Options">×</button></div>
+                </div>
+
+                <div class="search-options-fixed-controls">
+                  <section class="search-filter-popover-section search-sort-mode-section">
+                  <div class="search-filter-section-heading"><strong>Sort Results</strong></div>
+                  <div class="search-sort-mode-layout">
+                    <div id="searchSortModeOptions" class="search-sort-mode-options" role="group" aria-label="Search sort field"></div>
+                    <button id="resetFiltersBtn" type="button" class="btn compact ghost search-scope-reset-btn search-sort-reset-btn">Reset Search</button>
+                  </div>
+                </section>
+
+                <section class="search-filter-popover-section search-filter-rules-section">
+                  <div class="search-filter-section-heading"><strong>Search Scope</strong></div>
+                  <div class="search-filter-rule-selectors search-always-controls-grid">
+                    <label class="search-filter-popover-field search-scope-query-field">Search Text
+                      <input id="searchScopeQueryFilter" type="search" placeholder="Name, archetype, or card text" autocomplete="off" />
+                    </label>
+                    <label class="search-filter-popover-field">Card Pool
+                      <select id="searchCardPoolFilter"><option>TCG</option><option>OCG</option><option>GOAT</option><option>Master Duel</option><option>Speed Duel</option><option>Rush Duel</option><option>Duel Links</option><option>All</option></select>
+                    </label>
+                    <label class="search-filter-popover-field">Forbidden List
+                      <select id="searchBanlistFilter"><option value="TCG">2026.05 TCG</option><option value="OCG">2026.07 OCG</option><option value="Traditional">2026.05 Traditional</option><option value="2026.08 TCG Genesys">2026.08 TCG Genesys</option><option value="2026.08 OCG Genesys">2026.08 OCG Genesys</option><option value="2026.07 Rush">2026.07 Rush</option><option value="GOAT">2005.04 GOAT</option><option value="2008.01 Perfect Circle">2008.01 Perfect Circle</option><option value="2010.04 Edison">2010.04 Edison</option><option value="2011.07 Tengu Plant">2011.07 Tengu Plant</option><option value="2012.10 REDU/Wind-Up">2012.10 REDU/Wind-Up</option><option value="2014.04 HAT">2014.04 HAT</option><option value="2015.01 Charleston">2015.01 Charleston</option><option value="2019.10 TOSS">2019.10 TOSS</option><option value="2022.01 Bird-Up">2022.01 Bird-Up</option><option value="2025.11 Justice Dimensions">2025.11 Justice Dimensions</option><option value="None">No Banlist (!)</option></select>
+                    </label>
+                    <label class="search-filter-popover-field">Limit Status<select id="restrictionFilter"><option value="">Any</option><option>Unlimited</option><option>Forbidden</option><option>Limited</option><option>Semi-Limited</option></select></label>
+                    <label class="search-filter-popover-field">Maximum Results<input id="maxResultsFilter" type="number" min="1" max="2000" step="1" value="500" /></label>
+                  </div>
+                </section>
+                </div>
+
+                <div class="search-options-scroll-body">
+                <section class="search-filter-popover-section search-card-identity-section">
+                  <div class="search-filter-section-heading"><strong>Card Criteria</strong></div>
+                  <div class="search-filter-selector-grid">
+                    <label id="searchCardTypeField" class="search-filter-popover-field">Card Type
+                      <select id="categoryFilter"><option value="">Any</option><option value="Monster">Monster Cards</option><option value="Spell">Spell Cards</option><option value="Trap">Trap Cards</option><option value="Other">Other Cards</option></select>
+                    </label>
+                    <label id="searchDetailedTypeField" class="search-filter-popover-field" hidden><span id="searchDetailedTypeLabel">Category</span><select id="typeFilter"><option value="">Any</option></select></label>
+                    <label id="searchMonsterSubtypeField" class="search-filter-popover-field" hidden>Subtype<select id="monsterSubtypeFilter"><option value="">Any</option></select></label>
+                    <label id="searchAbilityField" class="search-filter-popover-field" hidden>Ability<select id="abilityFilter"><option value="">Any</option></select></label>
+                    <label id="searchAttributeField" class="search-filter-popover-field" hidden>Attribute<select id="attributeFilter"><option value="">Any</option></select></label>
+                    <label id="searchRaceField" class="search-filter-popover-field" hidden>Type / Race<select id="raceFilter"><option value="">Any</option></select></label>
+                  </div>
+                </section>
+
+                <details id="searchEffectTextDropdown" class="search-filter-dropdown search-effect-text-dropdown">
+                  <summary><span>Effect Text</span><span id="effectTextSummary">Any</span></summary>
+                  <div class="search-filter-dropdown-body">
+                    <label class="search-filter-popover-field search-effect-text-field">Contains
+                      <textarea id="effectTextFilter" rows="3" placeholder="Type effect wording, for example: Special Summon from your GY"></textarea>
+                    </label>
+                  </div>
+                </details>
+
+                <section id="searchPendulumScaleFilters" class="search-contextual-special-filter" hidden>
+                  <div class="search-filter-section-heading"><strong>Pendulum Scale</strong></div>
+                  <div class="search-filter-number-grid search-contextual-number-grid">
+                    <label id="scaleMinField" class="search-filter-popover-field">Scale min<input id="scaleMinFilter" type="number" min="0" max="13" step="1" placeholder="Any" /></label>
+                    <label id="scaleMaxField" class="search-filter-popover-field">Scale max<input id="scaleMaxFilter" type="number" min="0" max="13" step="1" placeholder="Any" /></label>
+                  </div>
+                </section>
+
+                <section id="searchXyzFilterDropdown" class="search-xyz-filter-workflow" hidden>
+                  <div class="search-link-filter-heading">
+                    <strong>Xyz Monster Filters</strong>
+                    <span id="xyzFilterSummary">Any Xyz</span>
+                  </div>
+                  <div class="search-link-filter-body">
+                    <details id="searchXyzMaterialsDropdown" class="search-filter-dropdown xyz-material-dropdown">
+                      <summary><span>Xyz Materials</span><span id="xyzMaterialSummary">Any materials</span></summary>
+                      <div class="search-filter-dropdown-body link-material-filter-wrap">
+                        <div class="link-material-count-grid">
+                          <label class="search-filter-popover-field">Minimum required
+                            <select id="xyzMaterialMinFilter"><option value="">Any</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4+">4+</option></select>
+                          </label>
+                          <label class="search-filter-popover-field">Maximum required
+                            <select id="xyzMaterialMaxFilter"><option value="">Any</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4+">4+</option></select>
+                          </label>
+                        </div>
+
+                        <div class="link-material-count-grid xyz-material-level-grid">
+                          <label class="search-filter-popover-field">Material Level min
+                            <input id="xyzMaterialLevelMinFilter" type="number" min="1" max="13" step="1" placeholder="Any" />
+                          </label>
+                          <label class="search-filter-popover-field">Material Level max
+                            <input id="xyzMaterialLevelMaxFilter" type="number" min="1" max="13" step="1" placeholder="Any" />
+                          </label>
+                        </div>
+
+                        <div class="link-material-subsection">
+                          <div class="link-filter-inline-heading">
+                            <span class="link-filter-subheading">Material Qualifiers</span>
+                            <div class="effect-mode-row link-material-match-mode"><span>Match</span><label><input type="radio" name="xyzMaterialQualifierMode" value="Any" checked /> Any selected</label><label><input type="radio" name="xyzMaterialQualifierMode" value="All" /> All selected</label></div>
+                          </div>
+                          <div id="xyzMaterialQualifierOptions" class="link-material-qualifier-options" role="group" aria-label="Xyz material qualifiers"></div>
+                        </div>
+
+                        <div class="link-material-selector-grid">
+                          <label class="search-filter-popover-field">Required Monster Type
+                            <select id="xyzMaterialRaceFilter"><option value="">Any</option></select>
+                          </label>
+                          <label class="search-filter-popover-field">Required Attribute
+                            <select id="xyzMaterialAttributeFilter"><option value="">Any</option></select>
+                          </label>
+                          <label class="search-filter-popover-field link-material-pattern-field">Requirement Pattern
+                            <select id="xyzMaterialPatternFilter">
+                              <option value="">Any pattern</option>
+                              <option value="same-level">Same Level</option>
+                              <option value="same-rank">Same Rank</option>
+                              <option value="same-type">Same Type</option>
+                              <option value="same-attribute">Same Attribute</option>
+                              <option value="different-names">Different names</option>
+                              <option value="specific-type">Specific Monster Type</option>
+                              <option value="specific-attribute">Specific Attribute</option>
+                              <option value="special">Additional / special requirement</option>
+                            </select>
+                          </label>
+                        </div>
+
+                        <details class="xyz-material-exact-details">
+                          <summary>Advanced: Exact printed requirement</summary>
+                          <div class="link-material-exact-body">
+                            <input id="xyzMaterialSearch" class="link-material-search" type="search" placeholder="Find an exact Xyz material requirement..." autocomplete="off" />
+                            <div id="xyzMaterialOptions" class="link-material-options" role="group" aria-label="Filter by exact Xyz Summon material requirement"></div>
+                            <div class="search-effect-actions"><button id="clearXyzMaterialsBtn" type="button" class="btn compact ghost">Clear Exact Requirements</button></div>
+                          </div>
+                        </details>
+                        <div class="search-effect-actions link-filter-clear-actions"><button id="clearAllXyzFiltersBtn" type="button" class="btn compact ghost">Clear Xyz Monster Filters</button></div>
+                      </div>
+                    </details>
+                  </div>
+                </section>
+
+
+                <section id="searchLinkFilterDropdown" class="search-link-filter-workflow" hidden>
+                  <div class="search-link-filter-heading">
+                    <strong>Link Monster Filters</strong>
+                    <span id="linkFilterSummary">Any Link</span>
+                  </div>
+                  <div class="search-link-filter-body">
+                    <div class="link-filter-section link-filter-section-persistent">
+                      <span class="link-filter-subheading">Link Rating</span>
+                      <div class="link-filter-range-grid">
+                        <label class="search-filter-popover-field">Minimum
+                          <input id="linkRatingMinFilter" type="number" min="1" max="8" step="1" placeholder="Any" />
+                        </label>
+                        <label class="search-filter-popover-field">Maximum
+                          <input id="linkRatingMaxFilter" type="number" min="1" max="8" step="1" placeholder="Any" />
+                        </label>
+                      </div>
+                    </div>
+
+                    <div class="link-filter-section link-filter-section-persistent">
+                      <div class="link-filter-inline-heading">
+                        <span class="link-filter-subheading">Arrow Directions</span>
+                        <div class="effect-mode-row link-arrow-match-mode"><span>Match</span><label><input type="radio" name="linkMarkerMode" value="Any" /> Any selected</label><label><input type="radio" name="linkMarkerMode" value="All" checked /> All selected</label></div>
+                      </div>
+                      <div id="linkArrowFilterGrid" class="link-arrow-filter-grid" role="group" aria-label="Filter Link Monsters by arrow direction"></div>
+                    </div>
+
+                    <details id="searchLinkMaterialsDropdown" class="search-filter-dropdown link-material-dropdown">
+                      <summary><span>Link Materials</span><span id="linkMaterialSummary">Any materials</span></summary>
+                      <div class="search-filter-dropdown-body link-material-filter-wrap">
+                        <div class="link-material-count-grid">
+                          <label class="search-filter-popover-field">Minimum required
+                            <select id="linkMaterialMinFilter"><option value="">Any</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4+">4+</option></select>
+                          </label>
+                          <label class="search-filter-popover-field">Maximum possible
+                            <select id="linkMaterialMaxFilter"><option value="">Any</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4+">4+</option></select>
+                          </label>
+                        </div>
+
+                        <div class="link-material-subsection">
+                          <div class="link-filter-inline-heading">
+                            <span class="link-filter-subheading">Material Qualifiers</span>
+                            <div class="effect-mode-row link-material-match-mode"><span>Match</span><label><input type="radio" name="linkMaterialQualifierMode" value="Any" checked /> Any selected</label><label><input type="radio" name="linkMaterialQualifierMode" value="All" /> All selected</label></div>
+                          </div>
+                          <div id="linkMaterialQualifierOptions" class="link-material-qualifier-options" role="group" aria-label="Link material qualifiers"></div>
+                        </div>
+
+                        <div class="link-material-selector-grid">
+                          <label class="search-filter-popover-field">Required Monster Type
+                            <select id="linkMaterialRaceFilter"><option value="">Any</option></select>
+                          </label>
+                          <label class="search-filter-popover-field">Required Attribute
+                            <select id="linkMaterialAttributeFilter"><option value="">Any</option></select>
+                          </label>
+                          <label class="search-filter-popover-field link-material-pattern-field">Requirement Pattern
+                            <select id="linkMaterialPatternFilter">
+                              <option value="">Any pattern</option>
+                              <option value="same-type">Same Type</option>
+                              <option value="same-attribute">Same Attribute</option>
+                              <option value="different-names">Different names</option>
+                              <option value="specific-type">Specific Monster Type</option>
+                              <option value="specific-attribute">Specific Attribute</option>
+                              <option value="special">Additional / special requirement</option>
+                            </select>
+                          </label>
+                        </div>
+
+                        <details class="link-material-exact-details">
+                          <summary>Advanced: Exact printed requirement</summary>
+                          <div class="link-material-exact-body">
+                            <input id="linkMaterialSearch" class="link-material-search" type="search" placeholder="Find an exact material requirement..." autocomplete="off" />
+                            <div id="linkMaterialOptions" class="link-material-options" role="group" aria-label="Filter by exact Link Summon material requirement"></div>
+                            <div class="search-effect-actions"><button id="clearLinkMaterialsBtn" type="button" class="btn compact ghost">Clear Exact Requirements</button></div>
+                          </div>
+                        </details>
+                        <div class="search-effect-actions link-filter-clear-actions"><button id="clearAllLinkFiltersBtn" type="button" class="btn compact ghost">Clear Link Monster Filters</button></div>
+                      </div>
+                    </details>
+                  </div>
+                </section>
+
+
+                <details id="searchAdditionalDropdown" class="search-filter-dropdown" hidden>
+                  <summary><span>Additional Card Filters</span><span id="searchAdditionalSummary">Any</span></summary>
+                  <div class="search-filter-dropdown-body">
+                    <div class="search-filter-selector-grid">
+                      <label class="search-filter-popover-field">Archetype<select id="archetypeFilter"><option value="">Any</option></select></label>
+                    </div>
+                  </div>
+                </details>
+
+                <details id="searchStatDropdown" class="search-filter-dropdown" hidden>
+                  <summary><span>Monster Stats</span><span id="searchStatSummary">Any Stats</span></summary>
+                  <div class="search-filter-dropdown-body">
+                    <div class="search-filter-number-grid">
+                      <label id="levelMinField" class="search-filter-popover-field">Level / Rank min<input id="levelMinFilter" type="number" min="0" max="13" /></label>
+                      <label id="levelMaxField" class="search-filter-popover-field">Level / Rank max<input id="levelMaxFilter" type="number" min="0" max="13" /></label>
+                      <label id="atkMinField" class="search-filter-popover-field">ATK min<input id="atkMinFilter" type="number" min="0" step="100" /></label>
+                      <label id="atkMaxField" class="search-filter-popover-field">ATK max<input id="atkMaxFilter" type="number" min="0" step="100" /></label>
+                      <label id="defMinField" class="search-filter-popover-field">DEF min<input id="defMinFilter" type="number" min="0" step="100" /></label>
+                      <label id="defMaxField" class="search-filter-popover-field">DEF max<input id="defMaxFilter" type="number" min="0" step="100" /></label>
+                    </div>
+                  </div>
+                </details>
+
+                <details id="searchEffectTypeDropdown" class="search-filter-dropdown">
+                  <summary><span>Effect Characteristics</span><span id="effectSummary">Any</span></summary>
+                  <div class="search-filter-dropdown-body">
+                    <div class="effect-mode-row search-effect-mode-row"><span>Match</span><label><input type="radio" name="effectMode" value="Any" checked /> Any selected</label><label><input type="radio" name="effectMode" value="All" /> All selected</label></div>
+                    <div id="effectOptions" class="effect-options search-effect-options"></div>
+                    <div class="search-effect-actions"><button id="clearEffectsBtn" type="button" class="btn compact ghost">Clear Effect Filters</button></div>
+                  </div>
+                </details>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div id="linkArrowScalePopover" class="link-arrow-scale-popover search-scale-popover icon-tools-popover hidden" role="dialog" aria-label="Search Link Arrow Tools">
+            <div class="link-arrow-scale-popover-heading"><strong>Link Arrow Tools</strong><button id="closeLinkArrowScalePopoverBtn" class="icon-btn compact-icon" type="button" aria-label="Close Link Arrow Tools">×</button></div>
+            <p>Manage both Search artwork overlays and the compact Details-panel Link indicator while keeping Search results visible.</p>
+            <section class="icon-tool-section link-arrow-visibility-tools">
+              <div class="icon-tool-section-heading">Visibility</div>
+              <div class="link-overlay-setting-row">
+                <div class="link-overlay-setting-copy"><span class="link-filter-subheading">Grid Artwork Arrows</span><span>Show individual Link arrows over card artwork in Search Grid.</span></div>
+                <label class="link-overlay-toggle" title="Show or hide Link Arrow artwork overlays in Search Grid"><input id="linkArrowGridOverlayToggle" type="checkbox" checked /><span class="link-overlay-toggle-track" aria-hidden="true"><span></span></span><span class="link-overlay-toggle-label">Show Grid</span></label>
+              </div>
+              <div class="link-overlay-setting-row">
+                <div class="link-overlay-setting-copy"><span class="link-filter-subheading">Details Artwork Arrows</span><span>Show individual Link arrows over card artwork in Search Details.</span></div>
+                <label class="link-overlay-toggle" title="Show or hide Link Arrow artwork overlays in Search Details"><input id="linkArrowDetailsOverlayToggle" type="checkbox" checked /><span class="link-overlay-toggle-track" aria-hidden="true"><span></span></span><span class="link-overlay-toggle-label">Show Details</span></label>
+              </div>
+              <div class="link-overlay-setting-row details-panel-indicator-toggle-row">
+                <div class="link-overlay-setting-copy"><span class="link-filter-subheading">Details Corner Indicator</span><span>Show the same white/red Link indicator used by Search List at the lower-right of Details card panels.</span></div>
+                <label class="link-overlay-toggle" title="Show or hide the compact Details-panel Link indicator"><input id="detailsPanelLinkIndicatorToggle" type="checkbox" checked /><span class="link-overlay-toggle-track" aria-hidden="true"><span></span></span><span class="link-overlay-toggle-label">Show indicator</span></label>
+              </div>
+            </section>
+            <section class="icon-tool-section">
+              <div class="icon-tool-section-heading">Artwork Overlay Scale</div>
+              <label class="search-scale-link-toggle" title="Keep Grid and Details Link Arrow scale synchronized">
+                <input id="linkArrowScaleLinked" type="checkbox" />
+                <span class="ui-toggle-track" aria-hidden="true"><span></span></span>
+                <span>Link Grid and Details scale</span>
+              </label>
+              <div class="link-arrow-scale-grid detached">
+                <label class="link-arrow-scale-field" for="linkArrowGridScale"><span>Grid</span><input id="linkArrowGridScale" type="range" min="50" max="200" step="5" value="125" /><output id="linkArrowGridScaleValue" for="linkArrowGridScale">125%</output></label>
+                <label class="link-arrow-scale-field" for="linkArrowDetailsScale"><span>Details</span><input id="linkArrowDetailsScale" type="range" min="50" max="200" step="5" value="120" /><output id="linkArrowDetailsScaleValue" for="linkArrowDetailsScale">120%</output></label>
+              </div>
+            </section>
+            <section class="icon-tool-section">
+              <div class="icon-tool-section-heading">Artwork Overlay Position</div>
+              <label class="search-scale-link-toggle" title="Keep Grid and Details Link Arrow positions synchronized">
+                <input id="linkArrowOffsetLinked" type="checkbox" />
+                <span class="ui-toggle-track" aria-hidden="true"><span></span></span>
+                <span>Link Grid and Details positions</span>
+              </label>
+              <div class="link-arrow-offset-grid">
+                <div class="link-arrow-offset-field"><span>Grid Y</span><button id="linkArrowGridOffsetUp" class="btn compact ghost" type="button">Up 1 px</button><input id="linkArrowGridOffset" type="range" min="-20" max="20" step="1" value="-1" aria-label="Grid vertical Link Arrow offset" /><button id="linkArrowGridOffsetDown" class="btn compact ghost" type="button">Down 1 px</button><output id="linkArrowGridOffsetValue" for="linkArrowGridOffset">-1 px</output></div>
+                <div class="link-arrow-offset-field"><span>Grid X</span><button id="linkArrowGridOffsetLeft" class="btn compact ghost" type="button">Left 1 px</button><input id="linkArrowGridOffsetX" type="range" min="-20" max="20" step="1" value="0" aria-label="Grid horizontal Link Arrow offset" /><button id="linkArrowGridOffsetRight" class="btn compact ghost" type="button">Right 1 px</button><output id="linkArrowGridOffsetXValue" for="linkArrowGridOffsetX">0 px</output></div>
+                <div class="link-arrow-offset-field"><span>Details Y</span><button id="linkArrowDetailsOffsetUp" class="btn compact ghost" type="button">Up 1 px</button><input id="linkArrowDetailsOffset" type="range" min="-20" max="20" step="1" value="0" aria-label="Details vertical Link Arrow offset" /><button id="linkArrowDetailsOffsetDown" class="btn compact ghost" type="button">Down 1 px</button><output id="linkArrowDetailsOffsetValue" for="linkArrowDetailsOffset">0 px</output></div>
+                <div class="link-arrow-offset-field"><span>Details X</span><button id="linkArrowDetailsOffsetLeft" class="btn compact ghost" type="button">Left 1 px</button><input id="linkArrowDetailsOffsetX" type="range" min="-20" max="20" step="1" value="0" aria-label="Details horizontal Link Arrow offset" /><button id="linkArrowDetailsOffsetRight" class="btn compact ghost" type="button">Right 1 px</button><output id="linkArrowDetailsOffsetXValue" for="linkArrowDetailsOffsetX">0 px</output></div>
+              </div>
+            </section>
+            <section class="icon-tool-section details-panel-link-tools">
+              <div class="icon-tool-section-heading">Details Corner Indicator</div>
+              <label class="link-arrow-scale-field icon-single-scale" for="detailsPanelLinkIndicatorScale"><span>Scale</span><input id="detailsPanelLinkIndicatorScale" type="range" min="50" max="200" step="5" value="100" /><output id="detailsPanelLinkIndicatorScaleValue">100%</output></label>
+              <div class="link-arrow-offset-grid compact-context-grid">
+                <div class="link-arrow-offset-field"><span>Vertical</span><button id="detailsPanelLinkIndicatorOffsetUp" class="btn compact ghost" type="button">Up 1 px</button><input id="detailsPanelLinkIndicatorOffsetY" type="range" min="-30" max="30" step="1" value="0" /><button id="detailsPanelLinkIndicatorOffsetDown" class="btn compact ghost" type="button">Down 1 px</button><output id="detailsPanelLinkIndicatorOffsetYValue">0 px</output></div>
+                <div class="link-arrow-offset-field"><span>Horizontal</span><button id="detailsPanelLinkIndicatorOffsetLeft" class="btn compact ghost" type="button">Left 1 px</button><input id="detailsPanelLinkIndicatorOffsetX" type="range" min="-30" max="30" step="1" value="0" /><button id="detailsPanelLinkIndicatorOffsetRight" class="btn compact ghost" type="button">Right 1 px</button><output id="detailsPanelLinkIndicatorOffsetXValue">0 px</output></div>
+              </div>
+            </section>
+            <div class="icon-tuning-file-note">Saved to <strong>icon-tuning.json</strong> in the application data folder.</div>
+          </div>
+
+          <div id="attributeIconScalePopover" class="link-arrow-scale-popover search-scale-popover icon-tools-popover hidden" role="dialog" aria-label="Search Attribute Icon Tools">
+            <div class="link-arrow-scale-popover-heading"><strong>Attribute Icon Tools</strong><button id="closeAttributeIconScalePopoverBtn" class="icon-btn compact-icon" type="button" aria-label="Close Attribute Icon Tools">×</button></div>
+            <p>Adjust Attribute icon scale and position independently for each Search view.</p>
+            <label class="search-scale-link-toggle" title="Keep Grid, Details, and List Attribute icon scale synchronized">
+              <input id="attributeIconScaleLinked" type="checkbox" />
+              <span class="ui-toggle-track" aria-hidden="true"><span></span></span>
+              <span>Link all three sliders</span>
+            </label>
+            <div class="link-arrow-scale-grid detached">
+              <label class="link-arrow-scale-field" for="attributeIconGridScale"><span>Grid</span><input id="attributeIconGridScale" type="range" min="50" max="200" step="5" value="75" /><output id="attributeIconGridScaleValue" for="attributeIconGridScale">75%</output></label>
+              <label class="link-arrow-scale-field" for="attributeIconDetailsScale"><span>Details</span><input id="attributeIconDetailsScale" type="range" min="50" max="200" step="5" value="70" /><output id="attributeIconDetailsScaleValue" for="attributeIconDetailsScale">70%</output></label>
+              <label class="link-arrow-scale-field" for="attributeIconListScale"><span>List</span><input id="attributeIconListScale" type="range" min="50" max="200" step="5" value="90" /><output id="attributeIconListScaleValue" for="attributeIconListScale">90%</output></label>
+            </div>
+            <section class="icon-tool-section attribute-position-tools">
+              <div class="icon-tool-section-heading">Position</div>
+              <label class="search-scale-link-toggle" title="Keep Grid, Details, and List Attribute icon positions synchronized"><input id="attributeIconOffsetLinked" type="checkbox" /><span class="ui-toggle-track" aria-hidden="true"><span></span></span><span>Link all three positions</span></label>
+              <label class="icon-tuning-context-row">View
+                <select id="attributeIconOffsetContext"><option value="grid">Grid</option><option value="details">Details</option><option value="list">List</option></select>
+              </label>
+              <div class="link-arrow-offset-grid compact-context-grid">
+                <div class="link-arrow-offset-field"><span>Vertical</span><button id="attributeIconOffsetUp" class="btn compact ghost" type="button">Up 1 px</button><input id="attributeIconOffsetY" type="range" min="-20" max="20" step="1" value="0" /><button id="attributeIconOffsetDown" class="btn compact ghost" type="button">Down 1 px</button><output id="attributeIconOffsetYValue">0 px</output></div>
+                <div class="link-arrow-offset-field"><span>Horizontal</span><button id="attributeIconOffsetLeft" class="btn compact ghost" type="button">Left 1 px</button><input id="attributeIconOffsetX" type="range" min="-20" max="20" step="1" value="0" /><button id="attributeIconOffsetRight" class="btn compact ghost" type="button">Right 1 px</button><output id="attributeIconOffsetXValue">0 px</output></div>
+              </div>
+            </section>
+            <div class="icon-tuning-file-note">Saved to <strong>icon-tuning.json</strong> in the application data folder.</div>
+          </div>
+
+          <div id="restrictionBadgeToolsPopover" class="link-arrow-scale-popover search-scale-popover icon-tools-popover hidden" role="dialog" aria-label="Restriction Badge Tools">
+            <div class="link-arrow-scale-popover-heading"><strong>Restriction Badge Tools</strong><button id="closeRestrictionBadgeToolsPopoverBtn" class="icon-btn compact-icon" type="button" aria-label="Close Restriction Badge Tools">×</button></div>
+            <p>Scale and position Forbidden, Limited, and Semi-Limited badges throughout the application.</p>
+            <label class="search-scale-link-toggle" title="Apply badge tuning to every application context"><input id="restrictionBadgeToolsLinked" type="checkbox" /><span class="ui-toggle-track" aria-hidden="true"><span></span></span><span>Link all badge contexts</span></label>
+            <label class="icon-tuning-context-row">Context
+              <select id="restrictionBadgeContext">
+                <option value="searchGrid">Search Grid</option><option value="searchDetails">Search Details</option><option value="searchList">Search List</option><option value="deckGrid">Deck Grid</option><option value="deckList">Deck List</option><option value="selectedCard">Selected Card</option>
+              </select>
+            </label>
+            <section class="icon-tool-section">
+              <div class="icon-tool-section-heading">Scale</div>
+              <label class="link-arrow-scale-field icon-single-scale" for="restrictionBadgeScale"><span>Scale</span><input id="restrictionBadgeScale" type="range" min="50" max="200" step="5" value="100" /><output id="restrictionBadgeScaleValue">100%</output></label>
+            </section>
+            <section class="icon-tool-section">
+              <div class="icon-tool-section-heading">Position</div>
+              <div class="link-arrow-offset-grid compact-context-grid">
+                <div class="link-arrow-offset-field"><span>Vertical</span><button id="restrictionBadgeOffsetUp" class="btn compact ghost" type="button">Up 1 px</button><input id="restrictionBadgeOffsetY" type="range" min="-30" max="30" step="1" value="0" /><button id="restrictionBadgeOffsetDown" class="btn compact ghost" type="button">Down 1 px</button><output id="restrictionBadgeOffsetYValue">0 px</output></div>
+                <div class="link-arrow-offset-field"><span>Horizontal</span><button id="restrictionBadgeOffsetLeft" class="btn compact ghost" type="button">Left 1 px</button><input id="restrictionBadgeOffsetX" type="range" min="-30" max="30" step="1" value="0" /><button id="restrictionBadgeOffsetRight" class="btn compact ghost" type="button">Right 1 px</button><output id="restrictionBadgeOffsetXValue">0 px</output></div>
+              </div>
+            </section>
+            <div class="icon-tuning-file-note">Saved to <strong>icon-tuning.json</strong> in the application data folder.</div>
+          </div>
+
+          <div class="results-toolbar">
+            <span id="resultCount">0 cards</span>
+            <div class="search-view-controls">
+              <div class="segmented small search-view-segmented" role="group" aria-label="Search view">
+                <button data-search-view="grid" class="active">Grid</button>
+                <button data-search-view="details">Details</button>
+                <button data-search-view="list">List</button>
+              </div>
+            </div>
+          </div>
+          <section class="shortcut-strip search-shortcut-strip" aria-label="Search result shortcuts">
+            <span>Right-click adds one copy to its normal deck zone</span>
+            <span><kbd>Ctrl</kbd> + right-click adds to Side Deck</span>
+          </section>
+
+          <div id="searchResults" class="search-results grid-view"></div>
+        </div>
+      </aside>
+
+      <div class="splitter vertical" id="leftSplitter" title="Drag to resize Card Search. Double-click to hide it."><button id="restoreSearchPaneBtn" class="splitter-restore" type="button" title="Show Card Search pane" aria-label="Show Card Search pane"><span class="restore-label">Search</span><span aria-hidden="true">›</span></button></div>
+
+      <main class="deck-panel panel">
+        <section class="deck-toolbar">
+          <div class="toolbar-group deck-sort-controls">
+            <div class="deck-sort-filter-label">
+              <span class="deck-sort-label-text">Deck Sort</span>
+              <div class="deck-sort-trigger-row">
+                <button id="deckSortFilterBtn" class="btn compact deck-sort-filter-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="deckSortPopover"><span id="deckSortSummary">Name · All Decks · All Families</span></button>
+                <div class="history-controls" role="group" aria-label="Deck edit history">
+                  <button id="undoBtn" class="btn compact ghost" type="button" disabled title="Undo the last deck edit (Ctrl+Z)">Undo</button>
+                  <button id="redoBtn" class="btn compact ghost" type="button" disabled title="Redo the last undone deck edit (Ctrl+Y or Ctrl+Shift+Z)">Redo</button>
+                </div>
+              </div>
+              <div id="deckSortPopover" class="deck-sort-popover hidden" role="dialog" aria-label="Deck Sort options">
+                <div class="deck-sort-popover-heading">
+                  <strong>Deck Sort</strong>
+                  <div class="deck-sort-popover-heading-actions">
+                    <button id="resetDeckSortBtn" type="button" class="btn compact ghost">Reset</button>
+                    <button id="pinDeckSortPopoverBtn" type="button" class="btn compact ghost drawer-pin-btn" aria-pressed="false" title="Keep Deck Sort open while reviewing the deck">Pin</button>
+                    <button id="dockDeckSortPopoverBtn" type="button" class="btn compact ghost drawer-dock-btn" aria-pressed="true" title="Undock Deck Sort into a movable window">Undock</button>
+                    <button id="closeDeckSortPopoverBtn" class="icon-btn compact-icon" type="button" aria-label="Close Deck Sort options">×</button>
+                  </div>
+                </div>
+                <section class="deck-sort-popover-section deck-sort-decks-section">
+                  <div class="deck-sort-section-heading"><strong>Decks to Sort</strong><span>Choose which deck sections receive the sort.</span></div>
+                  <div id="deckSortDeckOptions" class="deck-sort-choice-grid deck-sort-deck-options"></div>
+                </section>
+                <section class="deck-sort-popover-section deck-sort-family-section">
+                  <div class="deck-sort-section-heading"><strong>Sort Card Families</strong><span>Choose which broad card families are allowed to change order.</span></div>
+                  <div id="deckSortFamilyOptions" class="deck-sort-family-options" role="group" aria-label="Card families to sort"></div>
+                </section>
+                <details id="deckSortTypeDropdown" class="deck-sort-type-dropdown">
+                  <summary><span>Advanced: Detailed Type Filter</span><span id="deckSortTypeDropdownSummary">All Subtypes</span></summary>
+                  <div class="deck-sort-type-dropdown-body">
+                    <div class="deck-sort-section-heading deck-sort-subtype-help"><strong>Optional subtype scope</strong><span>Further limit which subtypes can move inside the selected card families.</span></div>
+                    <div class="deck-sort-radio-row deck-sort-match-row"><span>Match</span><label><input type="radio" name="deckSortTypeMode" value="Any" /> Any</label><label><input type="radio" name="deckSortTypeMode" value="All" /> All</label></div>
+                    <div id="deckSortTypeOptions" class="deck-sort-choice-grid deck-sort-type-options"></div>
+                  </div>
+                </details>
+                <section class="deck-sort-popover-section deck-sort-mode-section">
+                  <div class="deck-sort-section-heading deck-sort-mode-heading">
+                    <strong>Sort By</strong>
+                    <div class="deck-sort-heading-tools">
+                      <span>Click the active field again to reverse.</span>
+                      <label class="deck-sort-toggle deck-sort-toggle-compact" title="Keep Monster, Spell, Trap, and Other in separate broad groups when the selected sort supports grouping">
+                        <input id="deckSortGroupCategories" type="checkbox" checked />
+                        <span class="deck-sort-toggle-track" aria-hidden="true"><span></span></span>
+                        <span class="deck-sort-toggle-label">Keep families grouped</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div id="deckSortModeOptions" class="deck-sort-mode-options" role="group" aria-label="Deck sort field"></div>
+                </section>
+                <section class="deck-sort-popover-section deck-sort-saved-order-section">
+                  <div class="deck-sort-section-heading"><strong>Restore Order</strong><span id="savedDeckOrderStatus">Loaded file ready · Last manual order captures after a manual move</span></div>
+                  <div id="deckStoredOrderOptions" class="deck-sort-mode-options deck-sort-stored-options" role="group" aria-label="Stored deck orders"></div>
+                </section>
+                <section class="deck-sort-popover-section deck-sort-rules-section">
+                  <div class="deck-sort-section-heading"><strong>Rules Context</strong><span>Used by banlist-aware sorting and deck validation.</span></div>
+                  <div class="deck-sort-rule-selectors">
+                    <label class="deck-sort-popover-field">Forbidden List
+                      <select id="deckSortBanlistSelect"><option value="TCG">2026.05 TCG</option><option value="OCG">2026.07 OCG</option><option value="Traditional">2026.05 Traditional</option><option value="2026.08 TCG Genesys">2026.08 TCG Genesys</option><option value="2026.08 OCG Genesys">2026.08 OCG Genesys</option><option value="2026.07 Rush">2026.07 Rush</option><option value="GOAT">2005.04 GOAT</option><option value="2008.01 Perfect Circle">2008.01 Perfect Circle</option><option value="2010.04 Edison">2010.04 Edison</option><option value="2011.07 Tengu Plant">2011.07 Tengu Plant</option><option value="2012.10 REDU/Wind-Up">2012.10 REDU/Wind-Up</option><option value="2014.04 HAT">2014.04 HAT</option><option value="2015.01 Charleston">2015.01 Charleston</option><option value="2019.10 TOSS">2019.10 TOSS</option><option value="2022.01 Bird-Up">2022.01 Bird-Up</option><option value="2025.11 Justice Dimensions">2025.11 Justice Dimensions</option><option value="None">No Banlist (!)</option></select>
+                    </label>
+                    <label class="deck-sort-popover-field">Card Pool
+                      <select id="deckSortCardPoolSelect"><option>TCG</option><option>OCG</option><option>GOAT</option><option>Master Duel</option><option>Speed Duel</option><option>Rush Duel</option><option>Duel Links</option><option>All</option></select>
+                    </label>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+
+          <div class="deck-toolbar-center">
+            <div class="segmented" id="deckViewSelector" role="group" aria-label="Deck view">
+              <button data-deck-view="grid" class="active">Grid</button>
+              <button data-deck-view="list">List</button>
+              <button data-deck-view="readable">Readable</button>
+              <button data-deck-view="ydk">YDK</button>
+            </div>
+          </div>
+
+          <div class="toolbar-group right">
+            <button id="importClipboardBtn" class="btn compact ghost">Import Clipboard</button>
+            <button id="copyYdkBtn" class="btn compact ghost" title="Copy the current deck as YDK text">Copy YDK</button>
+            <button id="copyYdkeBtn" class="btn compact ghost" title="Copy the current deck as a YDKE code">Copy YDKE</button>
+            <button id="exportYdkBtn" class="btn compact ghost" title="Export the current deck as a YDK file">Export YDK</button>
+            <button id="exportYdkeBtn" class="btn compact ghost" title="Export the current deck as a YDKE file">Export YDKE</button>
+          </div>
+        </section>
+
+        <section class="shortcut-strip">
+          <span><kbd>Ctrl</kbd> + click selects multiple</span>
+          <span><kbd>Shift</kbd> + click selects a range</span>
+          <span><kbd>Alt</kbd> + click duplicates selection</span>
+          <span>Right-click removes selection</span>
+          <span><kbd>Ctrl</kbd> + right-click moves selection to/from Side</span>
+          <span>Drag to reorder or move selection</span>
+        </section>
+
+        <div id="visualDeckView" class="deck-visual-view">
+          <section class="deck-zone" data-section="main">
+            <div class="zone-heading">
+              <div class="zone-title-wrap"><button class="icon-btn zone-collapse-btn" data-zone-toggle="main" type="button" aria-expanded="true" title="Collapse Main Deck">^</button><h3>Main Deck</h3><span id="mainCount" class="count-badge">0 / 60</span></div>
+              <div id="mainBreakdown" class="zone-breakdown" aria-label="Main Deck card type totals"></div>
+            </div>
+            <div id="mainDeck" class="deck-grid drop-zone" data-section="main"></div>
+          </section>
+          <section class="deck-zone compact-zone" data-section="extra">
+            <div class="zone-heading">
+              <div class="zone-title-wrap"><button class="icon-btn zone-collapse-btn" data-zone-toggle="extra" type="button" aria-expanded="true" title="Collapse Extra Deck">^</button><h3>Extra Deck</h3><span id="extraCount" class="count-badge">0 / 15</span></div>
+              <div id="extraBreakdown" class="zone-breakdown" aria-label="Extra Deck card type totals"></div>
+            </div>
+            <div id="extraDeck" class="deck-grid drop-zone" data-section="extra"></div>
+          </section>
+          <section class="deck-zone compact-zone" data-section="side">
+            <div class="zone-heading">
+              <div class="zone-title-wrap"><button class="icon-btn zone-collapse-btn" data-zone-toggle="side" type="button" aria-expanded="true" title="Collapse Side Deck">^</button><h3>Side Deck</h3><span id="sideCount" class="count-badge">0 / 15</span></div>
+              <div id="sideBreakdown" class="zone-breakdown" aria-label="Side Deck card type totals"></div>
+            </div>
+            <div id="sideDeck" class="deck-grid drop-zone" data-section="side"></div>
+          </section>
+        </div>
+
+        <div id="listDeckView" class="deck-list-view hidden"></div>
+
+        <div id="textDeckView" class="deck-text-view hidden">
+          <div class="text-view-toolbar">
+            <span id="textViewTitle">Readable Deck</span>
+            <div>
+              <button id="parseTextBtn" class="btn compact">Apply to Deck</button>
+              <button id="refreshTextBtn" class="btn compact ghost">Refresh from Deck</button>
+              <button id="saveTextViewBtn" class="btn compact ghost">Save Text</button>
+            </div>
+          </div>
+          <div id="textEditorWrap" class="text-editor-wrap">
+            <div id="textLineSelection" class="text-line-selection hidden" aria-hidden="true"></div>
+            <div id="textLineHover" class="text-line-hover hidden" aria-hidden="true"></div>
+            <div id="textLineAnnotations" class="text-line-annotations" aria-hidden="true"></div>
+            <textarea id="deckTextArea" spellcheck="false" aria-label="Deck text editor"></textarea>
+          </div>
+          <div id="parseIssues" class="parse-issues"></div>
+        </div>
+
+        <div id="removeDrop" class="remove-drop" aria-hidden="true">Drop anywhere outside a deck zone to remove</div>
+      </main>
+
+      <div class="splitter vertical" id="rightSplitter" title="Drag to resize Card Details. Double-click to hide it."><button id="restoreRightPaneBtn" class="splitter-restore" type="button" title="Show Card Details pane" aria-label="Show Card Details pane"><span aria-hidden="true">‹</span><span class="restore-label">Details</span></button></div>
+
+      <aside id="rightPanel" class="panel right-panel">
+        <section class="selected-card-panel collapsible-section" data-collapse-key="selected">
+          <div class="panel-heading compact-heading card-details-heading-bar">
+            <div class="card-details-heading-copy"><h2>Card Details</h2><p id="selectedStatus">Select a card</p></div>
+            <div class="heading-actions card-details-heading-actions">
+              <button class="btn compact ghost card-details-swap-btn" id="swapPanelsBtn" type="button" title="Swap Card Details with Card Search" aria-label="Swap Card Details with Card Search">
+                <span class="swap-label-full">Swap with Search</span><span class="swap-label-short">Swap</span><span class="swap-label-icon" aria-hidden="true">⇄</span>
+              </button>
+              <button id="collapseSelectedBtn" class="icon-btn collapse-btn" type="button" aria-expanded="true" title="Collapse Card Details section">^</button>
+            </div>
+          </div>
+          <div id="selectedPanelBody" class="collapsible-body">
+            <div id="selectedEmpty" class="empty-state">Select a card from Search or a deck zone.</div>
+            <div id="selectedCard" class="selected-card hidden">
+              <div class="selected-art-wrap">
+                <img id="selectedArt" alt="Selected card artwork" />
+                <img id="selectedLimitBadge" class="limit-badge selected-limit-badge hidden" alt="" draggable="false" />
+              </div>
+              <div class="artwork-picker">
+                <span>Artwork</span>
+                <button id="artworkPrevBtn" class="icon-btn artwork-step" type="button" aria-label="Previous artwork">‹</button>
+                <div id="artworkDropdown" class="artwork-dropdown">
+                  <button id="artworkDropdownBtn" class="artwork-dropdown-btn" type="button" aria-haspopup="listbox" aria-expanded="false">Artwork 1</button>
+                  <div id="artworkMenu" class="artwork-menu hidden" role="listbox"></div>
+                </div>
+                <button id="artworkNextBtn" class="icon-btn artwork-step" type="button" aria-label="Next artwork">›</button>
+              </div>
+              <div class="selected-actions">
+                <button id="addPrimaryBtn" class="btn compact">Add to Deck</button>
+                <button id="addSideBtn" class="btn compact ghost">Add to Side</button>
+                <button id="openArtBtn" class="btn compact ghost">Enlarge</button>
+              </div>
+              <article class="card-details">
+                <div class="card-details-heading">
+                  <h3 id="detailName"></h3>
+                  <button id="cardTextStylingInline" class="card-text-style-toggle" type="button" aria-pressed="true" title="Turn bold and colored card-text emphasis off"><span class="card-text-style-glyph" aria-hidden="true">Aa</span><span data-card-text-styling-inline-label>Styled</span></button>
+                </div>
+                <div class="card-details-summary">
+                  <div class="card-details-primary">
+                    <div id="detailMeta" class="detail-meta"></div>
+                    <div id="detailStats" class="detail-stats"></div>
+                  </div>
+                  <div id="detailLinkIndicator" class="detail-link-indicator hidden" aria-label="Link Arrow indicator"></div>
+                </div>
+                <div id="detailText" class="detail-text card-effect-layout"></div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="analysis-panel collapsible-section" data-collapse-key="analysis">
+          <div class="analysis-header">
+            <div class="analysis-tabs segmented small">
+              <button data-analysis="validation" class="active">Validation</button>
+              <button data-analysis="statistics">Statistics</button>
+            </div>
+            <button id="collapseAnalysisBtn" class="icon-btn collapse-btn" type="button" aria-expanded="true" title="Collapse Analysis">^</button>
+          </div>
+          <div id="analysisPanelBody" class="collapsible-body">
+            <div id="validationView" class="analysis-view"></div>
+            <div id="statisticsView" class="analysis-view hidden"></div>
+          </div>
+        </section>
+
+      </aside>
+    </div>
+  </div>
+
+
+  <section id="duelWorkspace" class="duel-workspace" hidden aria-label="Integrated Test Duel">
+    <header class="duel-toolbar">
+      <div class="duel-toolbar-left">
+        <button id="duelBackBtn" type="button" class="btn ghost">Deck Builder</button>
+        <div class="duel-title-block"><strong>Test Duel</strong><span id="duelDeckName">You: Current Deck</span><span id="duelOpponentDeckName" class="duel-opponent-deck-name">Dummy: Clone Current Deck</span></div>
+      </div>
+      <div class="duel-toolbar-center">
+        <span id="duelTurn">Turn 1 · You</span><strong id="duelPhase">Preparing...</strong><span id="duelMatchStatus" class="duel-match-status" hidden></span>
+      </div>
+      <div class="duel-toolbar-right"><span id="duelEngineStatus" class="duel-engine-status">Rules Engine</span><button id=duelReplayTopBtn class=btn>Replay</button><button id="duelConfigMenuBtn" type="button" class="btn">Duel Configuration</button><div hidden aria-hidden="true"><button id="duelInterfaceSettingsBtn" type="button">UI</button><button id="duelSimulatorSettingsBtn" type="button">Simulator</button><button id="duelReplayToggle" type="button">Replay</button><button id="duelSessionLogExportBtn" type="button">Export Log</button><button id="duelOpponentDeckBtn" type="button">Dummy Deck</button><button id="duelDummyModeToggle" type="button">Dummy</button><button id="duelSurrenderBtn" type="button">Concede</button><button id="duelRestartBtn" type="button">Reset Duel</button><button id="duelAutoZoneToggle" type="button">Auto Zones</button><button id="duelOpponentCardsToggle" type="button">Opponent Cards</button><button id="duelOwnDeckViewToggle" type="button">Own Deck</button><button id="duelSoundToggle" type="button">Sound</button></div></div></header><aside id="duelConsolidatedMenu" class="duel-consolidated-menu" hidden><div class="duel-consolidated-menu-head"><strong>Test Duel</strong><button id="duelConsolidatedMenuClose" type="button" class="btn ghost">Close</button></div><button id="duelOpenConfigurationBtn" type="button" class="btn">Test Duel Configuration...</button><div class="duel-consolidated-menu-separator"></div><button id="duelMenuInterfaceBtn" type="button" class="btn ghost">Interface Settings...</button><button id="duelMenuSimulatorBtn" type="button" class="btn ghost">Simulator Settings...</button><button id="duelMenuReplayBtn" type="button" class="btn ghost">Replay Tools...</button><button id="duelMenuExportBtn" type="button" class="btn ghost">Export Duel Log</button><div class="duel-consolidated-menu-separator"></div><button id="duelMenuResetBtn" type="button" class="btn ghost">Reset Duel</button><button id="duelMenuConcedeBtn" type="button" class="btn ghost">Concede Duel</button></aside>
+
+        <aside id="duelInterfaceSettingsMenu" class="duel-interface-settings-menu" hidden aria-label="Duel interface settings">
+      <div class="duel-interface-settings-head"><strong>Interface Settings</strong><button id="duelInterfaceSettingsClose" type="button" class="btn ghost" aria-label="Close interface settings">Close</button></div>
+      <div class="duel-interface-settings-sections">
+      <details class="duel-interface-settings-section" open><summary>Prompts and Interaction</summary>
+        <label class="duel-interface-setting"><span><strong>Confirm Chain Selections</strong><small>Select a response, then confirm it.</small></span><input id="duelUiConfirmChain" type="checkbox" checked></label>
+        <label class="duel-interface-setting"><span><strong>Smart Optional Chain Prompts</strong><small>Suppress empty or unhelpful response windows. Hold Shift to show every legal timing.</small></span><input id="duelUiSmartOptionalChain" type="checkbox" checked></label>
+        <label class="duel-interface-setting"><span><strong>Hide Self-Negating Responses</strong><small>With Smart Prompts on, hide optional cards and effects that would negate your own activation. Hold Shift to show them.</small></span><input id="duelUiSuppressSelfNegating" type="checkbox" checked></label>
+        <label class="duel-interface-setting"><span><strong>Prompt Effect Context</strong><small>Show the source and relevant effect in prompts.</small></span><input id="duelUiPromptContext" type="checkbox" checked></label>
+        <label class="duel-interface-setting"><span><strong>Auto-Select Single Zone</strong><small>Automatically choose placement when exactly one preferred legal zone is needed.</small></span><input id="duelUiAutoZones" type="checkbox" checked></label>
+      </details>
+      <input id="duelUiSelectorGuidance" type="checkbox" hidden aria-hidden="true" tabindex="-1">
+      <details class="duel-interface-settings-section"><summary>Hover and Inspection</summary>
+        <label class="duel-interface-setting"><span><strong>Chain Effect Preview</strong><small>Show exact Chain effects while hovering.</small></span><input id="duelUiChainHover" type="checkbox" checked></label>
+        <label class="duel-interface-setting"><span><strong>Activation Effect Preview</strong><small>Show exact activatable effects while hovering.</small></span><input id="duelUiActivationHover" type="checkbox" checked></label>
+        <label class="duel-interface-setting"><span><strong>Card Hover Preview</strong><small>Show quick card information while hovering.</small></span><input id="duelUiCardHover" type="checkbox" checked></label>
+      </details>
+      <details class="duel-interface-settings-section" open><summary>Animations and Timing</summary>
+        <label class="duel-interface-setting"><span><strong>Duel Animations</strong><small>Enable all card, phase, Chain, and battle animation effects.</small></span><input id="duelUiAnimations" type="checkbox" checked></label>
+        <label class="duel-interface-setting"><span><strong>Sequential Action Pacing</strong><small>Separate meaningful actions while keeping draws and routine movement fast.</small></span><input id="duelUiActionPresentation" type="checkbox" checked></label>
+        <label class="duel-interface-setting"><span><strong>Phase Transitions</strong><small>Show each phase change and hold later actions until its animation finishes.</small></span><input id="duelUiPhasePresentation" type="checkbox" checked></label>
+        <label class="duel-interface-setting"><span><strong>Card Travel</strong><small>Animate cards moving between game locations.</small></span><input id="duelUiCardMovementAnimations" type="checkbox" checked></label>
+        <label class="duel-interface-setting"><span><strong>Showcases Follow Card Travel</strong><small>Start summon and concrete result showcases together with the related card movement. Turn off to compare sequential timing.</small></span><input id="duelUiSynchronizedShowcaseTravel" type="checkbox" checked></label>
+        <label class="duel-interface-setting"><span><strong>Effect Card Showcases</strong><small>Show the activated card prominently at field center.</small></span><input id="duelUiEffectActivationAnimations" type="checkbox" checked></label>
+        <label class="duel-interface-setting"><span><strong>Summon Card Showcases</strong><small>Show summoned monsters prominently at field center.</small></span><input id="duelUiSummonPresentations" type="checkbox" checked></label>
+        <label class="duel-interface-setting"><span><strong>Effect Target Showcases</strong><small>Present and hold selected effect targets before the effect resolves or moves them.</small></span><input id="duelUiTargetPresentations" type="checkbox" checked></label>
+        <label class="duel-interface-setting duel-interface-select-setting"><span><strong>Presentation Speed</strong><small>Controls pauses and featured presentations only.</small></span><select id="duelUiActionSpeed" aria-label="Action presentation speed"><option value="fast">Fast</option><option value="normal" selected>Normal</option><option value="dramatic">Dramatic</option></select></label>
+        <label class="duel-interface-setting duel-interface-select-setting"><span><strong>Attack Effect Intensity</strong><small>Scale the beam, impact, particles, and LP hit feedback by expected battle damage.</small></span><select id="duelUiBattleIntensity" aria-label="Battle effect intensity"><option value="reduced">Reduced</option><option value="standard">Standard</option><option value="enhanced" selected>Enhanced</option></select></label>
+      </details>
+      <input id="duelUiActivationShowcase" type="checkbox" checked hidden aria-hidden="true" tabindex="-1">
+      <details class="duel-interface-settings-section"><summary>Chain and Duel Log</summary>
+        <label class="duel-interface-setting duel-interface-select-setting"><span><strong>Chain Display Position</strong><small>Use the upper shelf or an adjustable side lane. Side lanes fall back safely on narrow windows.</small></span><select id="duelUiChainPosition" aria-label="Chain display position"><option value="upper" selected>Upper Playmat</option><option value="left">Left Side</option><option value="right">Right Upper Side</option></select></label>
+        <label class="duel-interface-setting duel-interface-range-setting"><span><strong>Chain Display Scale</strong><small>Scale the complete Chain presentation at every placement.</small></span><span class="duel-chain-scale-range"><input id="duelUiChainDisplayScale" type="range" min="55" max="100" step="1" value="100" aria-label="Chain display scale"><output id="duelUiChainDisplayScaleValue">100%</output></span></label>
+        <div id="duelUiChainPositionAdjustments" class="duel-chain-position-adjustments" hidden>
+          <label><span><strong>Horizontal Position</strong><small>Move within the selected side lane.</small></span><span class="duel-chain-position-range"><input id="duelUiChainOffsetX" type="range" min="-100" max="100" step="1" value="0" aria-label="Chain display horizontal position"><output id="duelUiChainOffsetXValue">Centered</output></span></label>
+          <label><span><strong>Vertical Position</strong><small>Move between the safe upper and lower field boundaries.</small></span><span class="duel-chain-position-range"><input id="duelUiChainOffsetY" type="range" min="-100" max="100" step="1" value="0" aria-label="Chain display vertical position"><output id="duelUiChainOffsetYValue">Centered</output></span></label>
+          <div class="duel-chain-position-actions"><button id="duelUiChainPositionPreview" type="button" class="btn ghost compact">Preview Position</button><button id="duelUiChainPositionReset" type="button" class="btn ghost compact">Reset Position</button></div>
+        </div>
+        <label class="duel-interface-setting"><span><strong>Chain Card Animations</strong><small>Show subtle rings on cards eligible to Chain and stronger numbered rings on active Chain Links.</small></span><input id="duelUiChainSourceEffects" type="checkbox" checked></label>
+        <label class="duel-interface-setting"><span><strong>Chain Result Indicators</strong><small>Show bright animated result states for negation, disable, destruction, banishment, and successful resolution.</small></span><input id="duelUiChainOutcomeEffects" type="checkbox" checked></label>
+        <label class="duel-interface-setting"><span><strong>Chain Link Connections</strong><small>Connect consecutive Chain Link cards inside the fixed Chain display only.</small></span><input id="duelUiChainConnections" type="checkbox" checked></label>
+        <label class="duel-interface-setting"><span><strong>Consolidated Chain Summaries</strong><small>Add one visual activation-and-resolution record after each multi-link Chain.</small></span><input id="duelUiChainSummaries" type="checkbox" checked></label>
+        <label class="duel-interface-setting"><span><strong>Interactive Chain Summaries</strong><small>Make links clickable, open their cards, and highlight all related Duel Log entries on hover.</small></span><input id="duelUiChainSummaryInteractive" type="checkbox" checked></label>
+      </details>
+      <input id="duelUiChainSummaryHoverCorrelation" type="checkbox" checked hidden aria-hidden="true" tabindex="-1">
+      <input id="duelUiChainSummaryCardDetails" type="checkbox" checked hidden aria-hidden="true" tabindex="-1">
+      <details class="duel-interface-settings-section"><summary>Piles and Visibility</summary>
+        <label class="duel-interface-setting"><span><strong>Pile Hover Contents</strong><small>Show legally visible Extra Deck, Graveyard, Banished, and Deck contents on hover.</small></span><input id="duelUiPileHoverLists" type="checkbox" checked></label>
+        <label class="duel-interface-setting"><span><strong>Pile Action Indicators</strong><small>Mark summonable or activatable cards and the pile containing each available action.</small></span><input id="duelUiActionablePileHighlight" type="checkbox" checked></label>
+        <label class="duel-interface-setting"><span><strong>Reveal Dummy Private Cards (Testing)</strong><small>Show cards that would normally be hidden from the player.</small></span><input id="duelUiOpponentCards" type="checkbox"></label>
+        <label class="duel-interface-setting"><span><strong>Free Main Deck Inspection</strong><small>Allow opening your Main Deck outside an effect.</small></span><input id="duelUiOwnDeckView" type="checkbox" checked></label>
+      </details>
+      <details class="duel-interface-settings-section"><summary>Sound</summary>
+        <label class="duel-interface-setting"><span><strong>Sound Effects</strong><small>Enable duel sound effects.</small></span><input id="duelUiSound" type="checkbox" checked></label>
+        <label class="duel-interface-setting duel-interface-range-setting"><span><strong>SFX Volume</strong></span><span class="duel-sfx-volume duel-ui-menu-volume"><input id="duelSfxVolume" type="range" min="0" max="100" value="68" aria-label="Duel sound effect volume"><output id="duelSfxVolumeValue">68%</output></span></label>
+      </details>
+      </div>
+    </aside>
+
+    <section id="duelReplayToolbar" class="duel-replay-toolbar" hidden aria-label="Replay controls">
+      <div class="duel-replay-control-row">
+        <div class="duel-replay-file-controls" aria-label="Replay files">
+          <button id="duelReplayOpenBtn" type="button" class="btn ghost compact">Open Replay</button>
+          <button id="duelReplaySaveBtn" type="button" class="btn ghost compact">Save Replay</button>
+          <button id="duelReplayCheckpointBtn" type="button" class="btn ghost compact">Checkpoint</button>
+          <button id="duelReplayDebugBtn" type="button" class="btn ghost compact" title="Save replay data with Duel Log and engine diagnostics">Save Debug</button>
+        </div>
+        <div class="duel-replay-transport" aria-label="Replay transport">
+          <button id="duelReplayRestartBtn" type="button" class="btn ghost compact replay-icon-btn" title="Replay from the beginning" aria-label="Replay from beginning">|&lt;</button>
+          <button id="duelReplayPreviousBtn" type="button" class="btn ghost compact replay-icon-btn" title="Previous recorded decision" aria-label="Previous recorded decision">&lt;</button>
+          <button id="duelReplayPlayPauseBtn" type="button" class="btn compact replay-play-btn" title="Play or pause replay">Play</button>
+          <button id="duelReplayNextBtn" type="button" class="btn ghost compact replay-icon-btn" title="Next recorded decision" aria-label="Next recorded decision">&gt;</button>
+          <button id="duelReplayEndBtn" type="button" class="btn ghost compact replay-icon-btn" title="Jump to the final recorded decision" aria-label="Jump to final recorded decision">&gt;|</button>
+          <label class="duel-replay-speed" title="Replay playback speed"><span>Speed</span><select id="duelReplaySpeed" aria-label="Replay speed"><option value="0.5">0.5x</option><option value="1" selected>1x</option><option value="2">2x</option><option value="4">4x</option></select></label>
+        </div>
+        <div class="duel-replay-status-wrap">
+          <span id="duelReplayStatus" class="duel-replay-status">No replay recorded</span>
+          <button id="duelReplayEventsBtn" type="button" class="btn ghost compact" aria-pressed="false" aria-controls="duelReplayEvents">Events</button>
+          <button id="duelReplayCloseBtn" type="button" class="icon-btn compact-icon" aria-label="Close replay controls" title="Close replay controls">×</button>
+        </div>
+      </div>
+      <div class="duel-replay-timeline-row">
+        <span class="duel-replay-timeline-label">Timeline</span>
+        <input id="duelReplayTimeline" type="range" min="0" max="0" value="0" step="1" aria-label="Replay decision timeline" />
+        <output id="duelReplayTimelineValue" for="duelReplayTimeline">0 / 0</output>
+      </div>
+      <div id="duelReplayEvents" class="duel-replay-events" hidden aria-label="Replay events"></div>
+    </section>
+
+    <div class="duel-shell">
+      <aside class="duel-side-panel duel-inspector-panel">
+        <div class="duel-player-summary opponent"><span>Practice Dummy</span><strong><span id="duelOpponentLP">8,000</span> LP</strong></div>
+        <div class="duel-inspector duel-card-details-panel duel-builder-card-details">
+          <div class="panel-heading compact-heading card-details-heading-bar duel-details-heading-bar">
+            <div class="card-details-heading-copy"><h2>Card Details</h2><p id="duelInspectStatus">Select a card</p></div>
+          </div>
+          <div class="selected-card duel-selected-card-shell">
+            <div class="selected-art-wrap duel-selected-art-wrap"><img id="duelInspectArt" src="assets/card_placeholder.png" alt="Selected duel card" /></div>
+            <div id="duelInspectActions" class="selected-actions duel-inspect-actions"></div>
+            <article class="card-details duel-card-details-article">
+              <div class="card-details-heading">
+                <h3 id="duelInspectName">Card Details</h3>
+                <button id="duelCardTextStylingToggle" class="card-text-style-toggle duel-style-toggle" type="button" aria-pressed="true" title="Show plain card text"><span class="card-text-style-glyph" aria-hidden="true">Aa</span><span data-duel-style-label>Styled</span></button>
+              </div>
+              <div class="card-details-summary">
+                <div class="card-details-primary">
+                  <div id="duelInspectMeta" class="detail-meta duel-inspect-meta"></div>
+                  <div id="duelInspectStats" class="detail-stats duel-inspect-stats"></div>
+                </div>
+              </div>
+              <div id="duelInspectText" class="detail-text duel-inspect-text card-effect-layout">Select a visible card on the field or in your hand.</div>
+            </article>
+          </div>
+        </div>
+        <div class="duel-player-summary player"><span>You</span><strong><span id="duelPlayerLP">8,000</span> LP</strong></div>
+      </aside>
+
+      <main id="duelBoardWrap" class="duel-board-wrap">
+        <div class="duel-battle-area" aria-label="Yu-Gi-Oh duel field">
+          <div class="duel-hand opponent" id="duelOpponentHand" aria-label="Opponent hand"></div>
+
+          <div class="duel-mat" aria-label="Mirrored Yu-Gi-Oh duel mat">
+            <div id="duelOpponentDeckPile" class="duel-pile deck-zone duel-grid-opp-deck" aria-label="Opponent Deck"></div>
+            <div id="duelOpponentSpells" class="duel-zone-row spell-row duel-grid-opp-spells" aria-label="Opponent Spell and Trap Zones"></div>
+            <div id="duelOpponentExtraPile" class="duel-pile extra-zone duel-grid-opp-extra" aria-label="Opponent Extra Deck"></div>
+
+            <div id="duelOpponentBanishedPile" class="duel-pile banished-zone duel-grid-opp-banished" aria-label="Opponent Banished"></div>
+            <div id="duelOpponentGravePile" class="duel-pile grave-zone duel-grid-opp-grave" aria-label="Opponent Graveyard"></div>
+            <div id="duelOpponentMonsters" class="duel-zone-row monster-row duel-grid-opp-monsters" aria-label="Opponent Monster Zones"></div>
+            <div id="duelOpponentFieldZone" class="duel-zone field-zone duel-grid-opp-field" aria-label="Opponent Field Zone"></div>
+
+            <div id="duelExtraMonsterZones" class="duel-extra-row" aria-label="Shared Extra Monster Zones"></div>
+
+            <div id="duelPlayerFieldZone" class="duel-zone field-zone duel-grid-player-field" aria-label="Your Field Zone"></div>
+            <div id="duelPlayerMonsters" class="duel-zone-row monster-row duel-grid-player-monsters" aria-label="Your Monster Zones"></div>
+            <div id="duelPlayerGravePile" class="duel-pile grave-zone duel-grid-player-grave" aria-label="Your Graveyard"></div>
+            <div id="duelPlayerBanishedPile" class="duel-pile banished-zone duel-grid-player-banished" aria-label="Your Banished"></div>
+
+            <div id="duelPlayerExtraPile" class="duel-pile extra-zone duel-grid-player-extra" aria-label="Your Extra Deck"></div>
+            <div id="duelPlayerSpells" class="duel-zone-row spell-row duel-grid-player-spells" aria-label="Your Spell and Trap Zones"></div>
+            <div id="duelPlayerDeckPile" class="duel-pile deck-zone duel-grid-player-deck" aria-label="Your Deck"></div>
+
+            <div class="duel-center-line" aria-hidden="true"></div>
+          </div>
+
+          <div class="duel-hand player" id="duelPlayerHand" aria-label="Your hand"></div>
+        </div>
+
+        <section id="duelOpponentNotice" class="duel-opponent-notice" hidden aria-live="assertive" aria-atomic="true">
+          <img id="duelOpponentNoticeArt" src="assets/card_placeholder.png" alt="Opponent action card" />
+          <div class="duel-opponent-notice-copy">
+            <div class="duel-opponent-notice-heading"><strong id="duelOpponentNoticeTitle">Practice Dummy action</strong><span id="duelOpponentNoticeChain" class="duel-opponent-notice-chain" hidden></span></div>
+            <div id="duelOpponentNoticeEffect" class="duel-opponent-notice-effect" hidden></div>
+            <div id="duelOpponentNoticeDetail" class="duel-opponent-notice-detail" hidden></div>
+          </div>
+        </section>
+
+        <div id="duelPhaseAnnouncement" class="duel-phase-announcement" aria-live="polite"></div>
+        <nav id="duelPhaseDock" class="duel-phase-dock" aria-label="Duel phases" hidden></nav>
+
+        <section id="duelResultOverlay" class="duel-result-overlay" data-result="victory" hidden aria-live="assertive" aria-modal="true">
+          <div class="duel-result-card">
+            <div class="duel-result-kicker">DUEL COMPLETE</div>
+            <h2 id="duelResultTitle">Victory</h2>
+            <p id="duelResultDetail">The duel has ended.</p>
+            <div class="duel-result-actions"><button id="duelResultSide" type="button" class="btn ghost" hidden>Side Deck</button><button id="duelResultRestart" type="button" class="btn">Restart Duel</button><button id="duelResultReplay" type="button" class="btn ghost">Replay Duel</button><button id="duelResultSaveReplay" type="button" class="btn ghost">Save Replay</button><button id="duelResultEnd" type="button" class="btn ghost">End Duel</button></div>
+          </div>
+        </section>
+
+        <section id="duelPrompt" class="duel-prompt duel-field-prompt" data-dismissible="0">
+          <button id="duelPromptMinimize" type="button" class="duel-prompt-minimize" title="Temporarily hide this prompt" aria-label="Minimize prompt">Minimize</button>
+          <h2 id="duelPromptTitle">Preparing Test Duel</h2>
+          <div id="duelPromptBody" class="duel-prompt-body"></div>
+          <button id="duelEngineRetryBtn" type="button" class="btn ghost duel-hidden-retry">Retry Engine</button>
+        </section>
+        <button id="duelPromptRestore" type="button" class="duel-prompt-restore" hidden aria-label="Restore duel prompt">Show Prompt</button>
+      </main>
+
+      <aside class="duel-side-panel duel-action-panel duel-log-side-panel">
+        <section class="duel-log-panel"><h3>Duel Log</h3><div id="duelLog" class="duel-log"></div></section>
+      </aside>
+    </div>
+  </section>
+
+  <input id="fileInput" type="file" accept=".ydk,.ydke,.txt,.md,.list,.deck,.csv,.tsv" hidden />
+
+  <dialog id="artDialog" class="modal art-modal">
+    <form method="dialog" class="art-modal-shell">
+      <img id="modalArt" alt="Card artwork" />
+      <div id="modalArtName" class="modal-art-name"></div>
+      <div class="modal-art-hint">Mouse wheel to zoom · click anywhere to close</div>
+    </form>
+  </dialog>
+
+  <dialog id="handDialog" class="modal hand-modal">
+    <form method="dialog" class="modal-shell hand-shell">
+      <div class="modal-heading"><div><h2>Opening Hand</h2><p>Five random cards from the Main Deck</p></div></div>
+      <div id="handCards" class="hand-cards"></div>
+      <div class="modal-actions"><button id="redrawBtn" type="button" class="btn">Redraw</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="confirmDialog" class="modal confirm-modal">
+    <form method="dialog" class="modal-shell confirm-shell">
+      <div class="modal-heading"><div><h2>YGO Deck Studio 3</h2></div></div>
+      <div id="confirmMessage" class="confirm-message"></div>
+      <div class="modal-actions confirm-actions">
+        <button id="confirmDismissBtn" class="btn ghost hidden" value="stay">Cancel</button>
+        <button id="confirmCancelBtn" class="btn ghost" value="cancel">Cancel</button>
+        <button id="confirmAcceptBtn" class="btn" value="confirm">OK</button>
+      </div>
+    </form>
+  </dialog>
+
+
+  <dialog id="helpDialog" class="modal help-modal">
+    <form method="dialog" class="modal-shell help-shell">
+      <div class="help-hero">
+        <div class="help-brand">
+          <div>
+            <div class="help-eyebrow">HELP &amp; DOCUMENTATION</div>
+            <h2>YGO Deck Studio 3</h2>
+            <p>Version 3.0.0-alpha.221-duelcore.1-rc237</p>
+          </div>
+        </div>
+        <button class="btn compact help-close" value="cancel">Close</button>
+      </div>
+      <div class="help-content">
+        <section class="help-quickstart">
+          <div class="help-section-heading"><div><h3>Quick Start</h3></div></div>
+          <div class="help-steps">
+            <div><strong>Find cards</strong><span>Use Card Search or open Search Options for detailed filters.</span></div>
+            <div><strong>Add cards</strong><span>Right-click a result or drag it into the deck.</span></div>
+            <div><strong>Edit the deck</strong><span>Drag cards to reorder or move them between valid deck zones.</span></div>
+            <div><strong>Save or share</strong><span>Save YDK files, export supported formats, or copy deck text.</span></div>
+          </div>
+        </section>
+
+        <div class="help-grid">
+          <section>
+            <div class="help-section-heading"><div><h3>Search</h3></div></div>
+            <ul>
+              <li>Card Search performs free-text searching. Search Text in Search Scope mirrors the same value.</li>
+              <li>Use Card Pool, Card Type, Limit Status, Maximum Results, and the available sort controls to narrow results.</li>
+              <li>Context-specific filters appear only when applicable. Pendulum shows Scale controls, Link shows Link Rating and Arrow Directions with Link Materials, and Xyz provides Xyz Materials.</li>
+              <li>Effect Text is collapsible. Effect Characteristics includes Hand Trap, Activates from Hand, Special Summon from Hand, Self Cost from Hand, and Reveals from Hand.</li>
+              <li>Trap Monsters are searchable from both Monster Cards and Trap Cards.</li>
+              <li>Reset Search clears all search text and criteria.</li>
+              <li>Grid, Details, and List provide alternate result views. Card artwork and card name are always protected as identity information. The normal metadata priority is Attribute, Level/Rank, Type, Subtype, ATK, DEF, Link, then Scale. Metadata used by active search criteria receives higher visibility priority, and selecting a mechanic such as Link, Pendulum, Xyz, Synchro, or Ritual elevates that mechanic's defining Link, Scale, or Level/Rank information only for that search. Available width is used before lower-priority information is truncated or hidden. Search List column dividers can be dragged to resize columns or double-clicked to auto-fit them.</li>
+            </ul>
+          </section>
+
+          <section>
+            <div class="help-section-heading"><div><h3>Deck Editing</h3></div></div>
+            <ul>
+              <li>Right-click a search result to add one copy to its normal deck zone. Repeat the add action for additional copies.</li>
+              <li>Ctrl + right-click adds or moves a card to or from the Side Deck where applicable.</li>
+              <li>Drag cards to reorder them or move them between valid deck zones.</li>
+              <li>Right-click a deck card or press Delete on a selection to remove it.</li>
+              <li>Ctrl + click toggles selection, Shift + click selects a range, and Alt + click duplicates.</li>
+              <li>Undo and Redo are available for normal deck editing.</li>
+            </ul>
+          </section>
+
+          <section>
+            <div class="help-section-heading"><div><h3>Views &amp; Card Details</h3></div></div>
+            <ul>
+              <li>Grid, List, Readable, and YDK deck views remain synchronized.</li>
+              <li>Click a card to inspect it in Card Details.</li>
+              <li>Card text can be selected and copied.</li>
+              <li>The YDK view displays numeric card codes required by the YDK format.</li>
+            </ul>
+          </section>
+
+          <section>
+            <div class="help-section-heading"><div><h3>Deck Sort</h3></div></div>
+            <ul>
+              <li>Select the deck sections and card families you want to reorganize.</li>
+              <li>Choose a sort field and direction, then apply optional subtype criteria.</li>
+              <li>Loaded File Order restores the order captured when the deck was opened.</li>
+              <li>Last Manual Order restores the most recently captured manual arrangement for each selected deck zone.</li>
+              <li>When undocked, Dock only returns the panel to the layout. Pin docks and pins it.</li>
+            </ul>
+          </section>
+
+          <section>
+            <div class="help-section-heading"><div><h3>Validation, Statistics &amp; Opening Hand</h3></div></div>
+            <ul>
+              <li>Validation checks common deck-size, placement, and Forbidden List conditions.</li>
+              <li>Statistics summarizes the current deck composition.</li>
+              <li>Draw 5 samples five random Main Deck cards without changing the deck.</li>
+            </ul>
+          </section>
+
+          <section>
+            <div class="help-section-heading"><div><h3>Files &amp; Clipboard</h3></div></div>
+            <ul>
+              <li>Open and Save work with supported deck files.</li>
+              <li>Recent provides quick access to recently opened decks.</li>
+              <li>Import Clipboard accepts supported YDK, YDKE, and readable deck text.</li>
+              <li>Export and Copy commands provide supported interchange formats.</li>
+              <li>Keep backups of important deck files before extensive editing or conversion.</li>
+            </ul>
+          </section>
+
+          <section>
+            <div class="help-section-heading"><div><h3>Card Database</h3></div></div>
+            <ul>
+              <li>Use Refresh Cards &amp; Rules to retrieve current supported card information and card-pool data.</li>
+              <li>The database status shows the total cards loaded and, when available, the Rush Duel record count.</li>
+              <li>Open Application Data Folder opens the local application data location.</li>
+            </ul>
+          </section>
+
+          <section>
+            <div class="help-section-heading"><div><h3>Keyboard Shortcuts</h3></div></div>
+            <div class="help-shortcuts">
+              <span><kbd>Ctrl</kbd> + <kbd>N</kbd><b>New deck</b></span>
+              <span><kbd>Ctrl</kbd> + <kbd>O</kbd><b>Open deck</b></span>
+              <span><kbd>Ctrl</kbd> + <kbd>S</kbd><b>Save deck</b></span>
+              <span><kbd>Ctrl</kbd> + <kbd>Z</kbd><b>Undo</b></span>
+              <span><kbd>Ctrl</kbd> + <kbd>Y</kbd><b>Redo</b></span>
+              <span><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd><b>Import Clipboard</b></span>
+              <span><kbd>F1</kbd><b>Help</b></span>
+              <span><kbd>Delete</kbd><b>Remove selected</b></span>
+            </div>
+          </section>
+        </div>
+
+        <section class="help-note">
+          <div class="help-section-heading"><div><h3>About &amp; Licensing</h3></div></div>
+          <p>YGO Deck Studio 3 is an unofficial, independently developed deck-building and deck-management utility. It is not affiliated with or endorsed by Konami Digital Entertainment.</p>
+          <p>Standard card metadata and supported image URLs may be retrieved from YGOPRODeck. Rush Duel card records may be retrieved from the published YAML Yugi Rush Duel aggregate maintained by DawnbrandBots. YGO Deck Studio 3 consumes the published data endpoint and does not copy or incorporate YAML Yugi source code.</p>
+          <p>Yu-Gi-Oh! names, card text, artwork, trademarks, and related intellectual property belong to their respective rights holders. See LEGAL_NOTICE.txt for the complete third-party and legal notice.</p>
+        </section>
+      </div>
+      <div class="modal-actions help-actions"><span>Press <kbd>F1</kbd> anytime to reopen Help.</span><button value="cancel" class="btn">Close</button></div>
+    </form>
+  </dialog>
+
+  <div id="contextMenu" class="context-menu hidden"></div>
+  <div id="toastStack" class="toast-stack"></div>
+
+  <script type="module" src="js/app.js?v=3.0.0-alpha.221-duelcore.1-rc237"></script>
+</body>
+</html>

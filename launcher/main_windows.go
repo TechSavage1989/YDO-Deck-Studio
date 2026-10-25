@@ -367,7 +367,7 @@ func scheduleSelfDelete() {
 	if err != nil {
 		return
 	}
-	cmd := exec.Command("cmd", "/C", fmt.Sprintf("ping 127.0.0.1 -n 3 >nul & del /f /q "%s"", exe))
+	cmd := exec.Command("cmd", "/C", fmt.Sprintf("ping 127.0.0.1 -n 3 >nul & del /f /q \"%s\"", exe))
 	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
 	_ = cmd.Start()
 }

@@ -2,9 +2,9 @@
 
 ## Current baseline
 
-The current development baseline is 3.0.0-alpha.221-duelcore.1-rc236.
+The current development baseline is 3.0.0-alpha.221-duelcore.1-rc237.
 
-This project is a recovered-source continuation. The original native Go source for the rc189 application shell was not available. The complete rc236 browser application source is preserved in the verified rc236 Source ZIP identified in SOURCE_SNAPSHOT.md. The initial Git import contains the launcher/updater and handoff files; do not assume missing web files can be reconstructed from older revisions. When the complete browser tree is synchronized into Git, tools/patch_embedded_web.py patches those browser assets into the verified rc189 native baseline before the launcher embeds that core executable.
+This project is a recovered-source continuation. The original native Go source for the rc189 application shell was not available. The current browser entry points, launcher/updater, tests, and release handoff are maintained in Git. The complete recovered-source tree, including web dependencies, artwork, and the verified rc189 native baseline, is distributed in the versioned Source ZIP identified in SOURCE_SNAPSHOT.md. Use that complete snapshot together with newer confirmed Git changes; do not reconstruct missing files from older revisions. tools/patch_embedded_web.py patches the maintained browser assets into the verified rc189 native baseline before the launcher embeds that core executable.
 
 Do not replace the recovered native baseline or reconstruct duel-engine behavior unless the project owner explicitly requests it.
 
