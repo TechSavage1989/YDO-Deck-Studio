@@ -1,0 +1,7 @@
+YGO Deck Studio 3 v3.0.0-alpha.221-duelcore.1-rc240
+
+- Restores the original Windows application icon in the launcher EXE.
+- Release builds verify all seven icon sizes against the original artwork.
+- Retains the Download-button fix and explicit download, install, and restart controls.
+
+After updating, press F1 and confirm rc240 in Help. The desktop shortcut and EXE can now use the embedded application icon. If Windows retains the generic cached image, refresh the desktop or reselect the icon from the updated EXE in the shortcut properties.

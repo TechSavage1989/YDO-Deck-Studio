@@ -55,6 +55,7 @@ def main():
     asset_name=f'YGO_Deck_Studio_3_v{v}_Chat.exe';exe=out/asset_name
     env=os.environ.copy();env.update({'GOOS':'windows','GOARCH':'amd64','CGO_ENABLED':'0'})
     run('go','build','-trimpath','-ldflags=-H windowsgui','-o',exe,'./launcher',env=env)
+    run(sys.executable,ROOT/'tools/validate_windows_icon.py',exe,ROOT/'web/assets/app_icon.ico')
     if not args.skip_tests:
         env2=os.environ.copy();env2['YGO_TEST_CANDIDATE']=str(exe);run('go','test','./launcher/updater','-run','TestDownloadAndValidateBuiltCandidate|TestWrongIdentityCandidateRejected','-v',env=env2)
     size=exe.stat().st_size; digest=sha256(exe)

@@ -1,0 +1,70 @@
+YGO DECK STUDIO 3
+RELEASE BUILD VALIDATION REPORT
+Version: v3.0.0-alpha.221-duelcore.1-rc240
+
+BASELINE
+
+Repository: https://github.com/TechSavage1989/YDO-Deck-Studio
+Git parent: 749445792005df0bfb1d0e576e1b78229ae080ff
+Previous published baseline: v3.0.0-alpha.221-duelcore.1-rc239
+Complete rc239 source ZIP SHA-256: 1349f80784705c1e62155ec4a9a15073e29dbdd910425304385081b7809d7f1c
+Recovered rc189 native baseline SHA-256: d1a91e2c53d9bb18472da91b28c5b92069dedfd70d8b2b41dc265c392936febf
+Earlier published release artifacts are unchanged.
+
+PRODUCT FIX
+
+The outer launcher in rc239 has no Windows resource directory. RC240 links the original application icon into the launcher at compile time, restoring the embedded icon that Windows uses for the EXE and its desktop shortcut. The original artwork image bytes are preserved at 16, 24, 32, 48, 64, 128 and 256 pixels. No shortcut target or updater installation behavior is changed.
+
+The resource object is generated with github.com/akavel/rsrc pinned to v0.10.2 and checked into source. Normal builds do not download a resource compiler. Only zero-plane ICO directory metadata is normalized to one plane, matching the original native baseline's group descriptors. The completed EXE is not modified to add its icon.
+
+PASSED CHECKS
+
+PASS - verified the complete published rc239 source snapshot and overlapping Git files
+PASS - verified the recovered rc189 native baseline and embedded compiler hashes
+PASS - JavaScript syntax for app.js and duel-core.js
+PASS - Go updater version comparison, including the exact rc239 to rc240 transition
+PASS - Go updater ETag/304, throttling, and error-state tests
+PASS - real application stylesheet in startup/periodic/focus update timer regression
+PASS - updater progress, unsaved-deck guard, active-duel guard, explicit install and error states
+PASS - real mouse Download with source stylesheet at widths 823 and 1280
+PASS - real mouse Download with packaged native stylesheet at widths 823 and 1280
+PASS - named-identity legality explanation regression
+PASS - shared Extra Monster Zone mapping and occupancy regression
+PASS - Xyz Material routing, detach semantics and final Chain regression
+PASS - visual Duel Log event/card click routing regression
+PASS - exact material auto-submit regression
+PASS - Windows amd64 GUI launcher compilation with icon resource object
+PASS - independent finished-PE resource parser verifies primary icon group, descriptors and all seven image payloads against the source ICO
+PASS - the same icon validator rejects the published rc239 launcher because it lacks a resource directory
+PASS - the same icon validator accepts the recovered original native baseline
+PASS - exact built candidate download, SHA-256, size, PE architecture, identity and version validation
+PASS - wrong application identity rejection
+PASS - full tested native core payload embedded in the output launcher
+PASS - portable archive CRC and exact stable-name launcher byte identity
+PASS - complete source archive CRC
+
+RESOURCE INPUTS
+
+Source icon SHA-256: ee3f95fc914d37bf60832d7317b68ed36a885accd2a2415a876bee584a5a5aa9
+Linked resource object SHA-256: 57e5644fe425e5e8887731d364db1b1a7652113b392237d1e973cc6acff350e5
+Generated native core SHA-256: eea4a6c22aa691022c92b370ede32dd4217a242fba8ae7764908a4db4fd0b76b
+
+EXECUTABLE
+
+File: YGO_Deck_Studio_3_v3.0.0-alpha.221-duelcore.1-rc240_Chat.exe
+Size: 25642496 bytes
+SHA-256: 6bfcea1038cbaf55bb79040f32d56e88aca7f0ec6eb18ebd4e6675f9e41f99ad
+
+update-manifest.json is generated from this exact executable. The portable package uses YGO Deck Studio 3.exe. Source, validation report, manifest and checksums accompany the executable and portable package.
+
+LIVE PUBLICATION CHECK
+
+This is the build-time report. After publication, verify all six server asset digests and run the unchanged rc239 updater source against the public feed to confirm rc240 discovery and executable download/validation, then confirm rc240 reports up to date. These checks are separate from native Windows installation and visible desktop icon display.
+
+OWNER TEST
+
+In rc239, use Check for Updates, select Download, then Install and restart after saving any deck changes and ending an active duel. Press F1 and confirm rc240. Check the desktop shortcut image. If Windows retains a cached generic icon, refresh the desktop or reselect the updated launcher EXE in the shortcut's Change Icon dialog.
+
+VALIDATION LIMITS
+
+This Linux environment cannot execute native Windows GUI launch, replace a running Windows launcher on NTFS, or verify Windows restart, visible-window health confirmation, desktop icon-cache refresh, or rollback. Those native checks remain pending owner confirmation. Binaries remain unsigned.

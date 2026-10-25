@@ -2,7 +2,7 @@
 
 ## Current baseline
 
-The current development baseline is 3.0.0-alpha.221-duelcore.1-rc239.
+The current development baseline is 3.0.0-alpha.221-duelcore.1-rc240.
 
 This project is a recovered-source continuation. The original native Go source for the rc189 application shell was not available. The current browser entry points, launcher/updater, tests, and release handoff are maintained in Git. The complete recovered-source tree, including web dependencies, artwork, and the verified rc189 native baseline, is distributed in the versioned Source ZIP identified in SOURCE_SNAPSHOT.md. Use that complete snapshot together with newer confirmed Git changes; do not reconstruct missing files from older revisions. tools/patch_embedded_web.py patches the maintained browser assets into the verified rc189 native baseline before the launcher embeds that core executable.
 
@@ -44,6 +44,8 @@ Linux/macOS development environments with Go and Python:
 python3 scripts/build_release.py --out dist
 
 The build produces a versioned standalone Windows executable, a portable ZIP containing the stable launch filename, source ZIP, update-manifest.json, validation report when present, and SHA-256 manifest.
+
+The Windows launcher must link launcher/rsrc_windows_amd64.syso. The checked-in object contains the original application icon and is verified against web/assets/app_icon.ico in the finished executable during every release build. Run python tools/generate_windows_icon.py to regenerate it after an icon change. Never patch the completed launcher to add icons.
 
 ## Tests
 

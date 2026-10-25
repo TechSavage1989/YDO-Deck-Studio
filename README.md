@@ -2,7 +2,7 @@
 
 YGO Deck Studio is a Windows desktop deck-building and integrated test-duel application.
 
-The current recovered-source development line preserves the existing native application core and browser UI while adding a source-controlled stable launcher and safe GitHub Releases update path. Current version: 3.0.0-alpha.221-duelcore.1-rc239. Help displays the full installed version, and its button tooltip includes the F1 shortcut. Git contains current application entry points, launcher/updater, tests, and handoff files. Use the complete versioned Source ZIP described in SOURCE_SNAPSHOT.md for unchanged web dependencies, artwork, and the recovered native baseline.
+The current recovered-source development line preserves the existing native application core and browser UI while adding a source-controlled stable launcher and safe GitHub Releases update path. Current version: 3.0.0-alpha.221-duelcore.1-rc240. The launcher embeds the original application icon so Windows can display it on the desktop. Help displays the full installed version, and its button tooltip includes the F1 shortcut. Git contains current application entry points, launcher/updater, tests, and handoff files. Use the complete versioned Source ZIP described in SOURCE_SNAPSHOT.md for unchanged web dependencies, artwork, and the recovered native baseline.
 
 Read AGENTS.md before development and DEVELOPMENT_HANDOFF.md before continuing work from another chat or environment.
 

@@ -2,17 +2,17 @@
 
 ## Latest version
 
-3.0.0-alpha.221-duelcore.1-rc239
+3.0.0-alpha.221-duelcore.1-rc240
 
-Previous published baseline: 3.0.0-alpha.221-duelcore.1-rc238. Native Windows installation and restart still require owner confirmation.
+Previous published baseline: 3.0.0-alpha.221-duelcore.1-rc239. Native Windows installation and restart still require owner confirmation.
 
 ## Source and repository state
 
 Repository: https://github.com/TechSavage1989/YDO-Deck-Studio
 
-Repository visibility: public. Git parent: eb8221227288204aaacc0ccf07277ee957fc2709.
+Repository visibility: public. Git parent: 749445792005df0bfb1d0e576e1b78229ae080ff.
 
-The complete published rc238 Source ZIP was verified against SHA-256 540766a4966aa332acb49977935c44f5ff3e837575ab2a26a61b00f5dc710e0a before continuing. RC239 is a small update-test pre-release: the Help button tooltip and accessible label now include the F1 shortcut. The installed-version label remains visible in Help.
+The complete published rc239 Source ZIP was verified against SHA-256 1349f80784705c1e62155ec4a9a15073e29dbdd910425304385081b7809d7f1c before continuing. RC240 restores the original Windows application icon in the outer launcher. RC239 had no PE resource directory, which explains the generic desktop icon. The application still launched; no shortcut-target repair is needed for that symptom.
 
 The rc238 Download-button correction is retained. Available updates must not receive progress-only interaction restrictions. The existing real mouse regressions continue to load source and packaged native stylesheets at 823 and 1280 pixel viewport widths.
 
@@ -87,7 +87,7 @@ The release builder:
 3. runs JavaScript syntax checks
 4. runs updater Go tests
 5. runs focused Playwright regressions
-6. cross-builds the Windows amd64 launcher
+6. cross-builds the Windows amd64 launcher with the checked-in icon resource object and validates all linked icon images
 7. validates the built candidate through the updater's download/identity path
 8. creates standalone, portable, source, update manifest, and checksum artifacts
 
@@ -102,9 +102,15 @@ The release builder:
 - tests/test_rc230_exact_material_autosubmit.py
 - launcher/updater Go tests, including ETag, throttling, version comparison, candidate validation, and wrong-identity rejection
 
+## Launcher icon build
+
+launcher/rsrc_windows_amd64.syso contains the original seven application icon images, from 16 through 256 pixels. Go links this Windows amd64 object at compilation. The source icon is web/assets/app_icon.ico. tools/generate_windows_icon.py regenerates the object with github.com/akavel/rsrc pinned to v0.10.2, preserving image bytes and normalizing zero-plane ICO metadata to one plane for Windows group descriptors. Ordinary builds do not download this tool.
+
+tools/validate_windows_icon.py reads the finished launcher PE resource tree and verifies the primary group, metadata, and every icon image against the source ICO. The release builder runs this check even with --skip-tests. This check rejects the published rc239 launcher because it has no resource directory. The recovered original baseline provides an independent positive check. Never modify the completed EXE to insert an icon.
+
 ## Native validation status
 
-RC239 is built as a Windows amd64 GUI PE. The release build runs JavaScript syntax checks, Go updater tests, real mouse interactions against source and packaged CSS, focused duel regressions, and validation of the generated candidate. The version comparison tests include the exact rc238 to rc239 transition. Portable ZIP CRC and launcher byte identity are checked during packaging. See DUELCORE_VALIDATION_alpha221_duelcore1_rc239.txt for the recorded results.
+RC240 is built as a Windows amd64 GUI PE. The release build runs JavaScript syntax checks, Go updater tests, real mouse interactions against source and packaged CSS, focused duel regressions, linked icon resource validation, and validation of the generated candidate. The version comparison tests include the exact rc239 to rc240 transition. Portable ZIP CRC and launcher byte identity are checked during packaging. See DUELCORE_VALIDATION_alpha221_duelcore1_rc240.txt for the recorded results.
 
 This Linux environment cannot execute the native Windows GUI or confirm running-launcher replacement, Windows restart, visible-window health confirmation, shortcuts, or rollback. Those checks remain pending the owner's Windows test.
 
@@ -118,13 +124,13 @@ The update helper is copied to per-user application data only for an explicit in
 
 ## Known release-state limitation at handoff
 
-RC236, RC237, and RC238 are published. RC238's six uploaded assets matched the prepared sizes and server SHA-256 digests. Its live release was discovered and downloaded by the original updater client, including candidate integrity/identity/version validation and an HTTP 304 cache check.
+RC239 is published. Its six uploaded assets matched the prepared sizes and server SHA-256 digests. The unchanged rc238 updater client discovered and downloaded rc239, including candidate integrity/identity/version validation, an HTTP 304 cache check, and an installed-rc239 up-to-date check. Native Windows replacement and desktop icon display remain owner checks.
 
-RC239 uses tag v3.0.0-alpha.221-duelcore.1-rc239. Publish its matching manifest and executable together with the portable/source ZIPs, validation report, and checksums. After publication, verify all six server asset digests and run the unchanged rc238 updater client against the public feed to confirm rc239 discovery and download validation.
+RC240 uses tag v3.0.0-alpha.221-duelcore.1-rc240. Publish its matching manifest and executable together with the portable/source ZIPs, validation report, and checksums. After publication, verify all six server asset digests and run the unchanged rc239 updater client against the public feed to confirm rc240 discovery and download validation.
 
-Owner test from rc238: use Check for Updates, select Download, then Install and restart after saving any deck and ending an active duel. Press F1 after restart and confirm rc239. Hover over Help to see Help and About (F1).
+Owner test from rc239: use Check for Updates, select Download, then Install and restart after saving any deck and ending an active duel. Press F1 after restart and confirm rc240. Check the desktop shortcut image. If Windows keeps the generic cached image, refresh the desktop or open the shortcut properties and reselect its icon from the updated launcher EXE.
 
-For affected rc236/rc237 builds, Tab/Enter can activate Download once despite the old mouse-only CSS defect; alternatively use the latest portable package for manual launcher replacement. Do not infer Windows replacement or rollback success from feed/download tests.
+For affected rc236/rc237 builds, Tab/Enter can activate Download once despite the old mouse-only CSS defect; alternatively use the latest portable package for manual launcher replacement. Do not infer Windows replacement, icon-cache refresh, or rollback success from feed/download tests.
 
 ## Initial public source import
 
