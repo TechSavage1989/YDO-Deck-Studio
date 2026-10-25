@@ -1,0 +1,2 @@
+File: YGO_Deck_Studio_3_v3.0.0-alpha.221-duelcore.1-rc189_Base.exe
+SHA-256: d1a91e2c53d9bb18472da91b28c5b92069dedfd70d8b2b41dc265c392936febf

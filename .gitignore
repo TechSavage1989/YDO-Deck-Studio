@@ -1,0 +1,10 @@
+dist/
+launcher/payload/YGODeckStudioCore.exe
+*.tmp
+*.part
+.pytest_cache/
+__pycache__/
+.DS_Store
+
+# Recovered native baseline is distributed separately from Git source.
+base/*.exe

@@ -1,0 +1,10 @@
+YGO Deck Studio 3 v3.0.0-alpha.221-duelcore.1-rc236
+
+- Added a stable Windows launcher that preserves the existing application core while providing native update checks, downloads, validation, rollback, and restart control.
+- Added automatic update checks at startup, every five minutes while the app is active and online, and on focus return after two minutes.
+- Added ETag caching, single-flight checks, manual-check cooldowns, Retry-After and GitHub rate-limit backoff, and explicit offline/error states.
+- Added a compact in-app update banner with installed/latest versions, short release notes, Read more only when release text exists, Download, and Install and restart actions.
+- Updates never download, install, or restart automatically.
+- Added trusted GitHub release/asset allowlists, SHA-256 verification, Windows PE architecture validation, app identity/version validation, size limits, same-filesystem staging, one rollback backup, and automatic rollback when the restarted app does not report healthy.
+- Preserved user settings and existing per-user application data. Updater cache, downloads, staging state, rollback, and health files live under the per-user local application data directory.
+- Added AGENTS.md, DEVELOPMENT_HANDOFF.md, reproducible release packaging, update-manifest.json generation, and a prepared GitHub Actions build/release workflow.
