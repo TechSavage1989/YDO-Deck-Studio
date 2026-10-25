@@ -1,0 +1,13 @@
+YGO DECK STUDIO 3 - LEGAL AND THIRD-PARTY NOTICE
+
+YGO Deck Studio 3 is an unofficial, independently developed deck-building, deck-management, and test-duel utility. It is not affiliated with, sponsored by, or endorsed by Konami Digital Entertainment.
+
+Yu-Gi-Oh! names, card text, card artwork, trademarks, and related intellectual property belong to their respective rights holders. No ownership of those materials is claimed by this application or its distributor.
+
+Standard card metadata and supported card image locations may be retrieved from YGOPRODeck. Rush Duel records may be retrieved from the published YAML Yugi Rush Duel aggregate maintained by DawnbrandBots.
+
+The test-duel feature may download or use third-party rules components and data, including OCGCore or native-core, BabelCDB, and Project Ignis CardScripts. Those projects and their distributed files remain subject to their respective authors' terms and licenses. This notice does not replace any license or notice included with those projects.
+
+The application may open external services or websites selected by the user. Those services are governed by their own terms, privacy policies, and availability.
+
+This development build is provided for testing and deck-development purposes. Users are responsible for maintaining backups of their deck files and for verifying tournament legality under the rules and banlist applicable to their event.
