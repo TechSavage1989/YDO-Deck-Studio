@@ -1,9 +1,13 @@
 YGO DECK STUDIO 3
-Version 3.0.0-alpha.221-duelcore.1-rc240
+Version 3.0.0-alpha.221-duelcore.1-rc241
 
 STARTING THE APPLICATION
 
-Run "YGO Deck Studio 3.exe" from any writable folder. The application is portable, but it stores its card database, duel rules package, browser profile, preferences, recent deck history, and Deck Library directory permissions in its application data location.
+Run "YGODeckStudio.exe" from any writable folder. The application is portable, but it stores its card database, duel rules package, browser profile, preferences, recent deck history, and Deck Library directory permissions in its application data location.
+
+APPLICATION UPDATES AND SHORTCUTS
+
+New standalone downloads and portable packages use the same executable name, "YGODeckStudio.exe". Keep this EXE in a permanent writable folder and create shortcuts to that file. Updates replace the running launcher in place and restart the same path. Existing installations with an older or user-chosen filename keep that path so their current shortcuts continue to work.
 
 STARTING A TEST DUEL
 

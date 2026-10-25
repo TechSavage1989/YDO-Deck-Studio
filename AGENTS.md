@@ -2,7 +2,7 @@
 
 ## Current baseline
 
-The current development baseline is 3.0.0-alpha.221-duelcore.1-rc240.
+The current development baseline is 3.0.0-alpha.221-duelcore.1-rc241.
 
 This project is a recovered-source continuation. The original native Go source for the rc189 application shell was not available. The current browser entry points, launcher/updater, tests, and release handoff are maintained in Git. The complete recovered-source tree, including web dependencies, artwork, and the verified rc189 native baseline, is distributed in the versioned Source ZIP identified in SOURCE_SNAPSHOT.md. Use that complete snapshot together with newer confirmed Git changes; do not reconstruct missing files from older revisions. tools/patch_embedded_web.py patches the maintained browser assets into the verified rc189 native baseline before the launcher embeds that core executable.
 
@@ -16,7 +16,7 @@ Expected release feed: GitHub Releases from the same repository.
 
 App identity: com.techsavage1989.ygo-deck-studio
 
-Default portable launch filename: YGO Deck Studio 3.exe
+Stable public executable filename: YGODeckStudio.exe
 
 Do not change repository visibility, publish source, create credentials, embed tokens, overwrite a published release, or change release ownership without explicit owner approval.
 
@@ -43,7 +43,7 @@ py -3 scripts\build_release.py --out dist
 Linux/macOS development environments with Go and Python:
 python3 scripts/build_release.py --out dist
 
-The build produces a versioned standalone Windows executable, a portable ZIP containing the stable launch filename, source ZIP, update-manifest.json, validation report when present, and SHA-256 manifest.
+The build produces a standalone Windows executable named YGODeckStudio.exe, a portable ZIP containing the stable launch filename, source ZIP, update-manifest.json, validation report when present, and SHA-256 manifest.
 
 The Windows launcher must link launcher/rsrc_windows_amd64.syso. The checked-in object contains the original application icon and is verified against web/assets/app_icon.ico in the finished executable during every release build. Run python tools/generate_windows_icon.py to regenerate it after an icon change. Never patch the completed launcher to add icons.
 
@@ -69,11 +69,13 @@ Automatic checks occur at startup, every five minutes while active/online, and o
 Update release requirements:
 
 - update-manifest.json asset
-- versioned Windows launcher executable named by update-manifest.json
+- YGODeckStudio.exe launcher asset named by update-manifest.json
 - matching SHA-256 and file size in the manifest
 - GitHub Release tag matching the manifest tag
 
 A matching hash is integrity validation, not publisher code signing.
+
+The public standalone asset, manifest asset_name, and portable EXE must all use YGODeckStudio.exe, without any release or version suffix. Versioned archive/tag names remain supported. The installer must continue replacing and restarting the actual running launcher path. Preserve existing custom or legacy executable paths so current shortcuts remain valid; never derive the installed target name from the release asset name.
 
 ## Data locations
 

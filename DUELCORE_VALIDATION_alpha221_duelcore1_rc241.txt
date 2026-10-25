@@ -1,0 +1,69 @@
+YGO DECK STUDIO 3
+RELEASE BUILD VALIDATION REPORT
+Version: v3.0.0-alpha.221-duelcore.1-rc241
+
+BASELINE
+
+Repository: https://github.com/TechSavage1989/YDO-Deck-Studio
+Git parent: bfdd322ea9babad795698f3262cf654451ba9727
+Previous published baseline: v3.0.0-alpha.221-duelcore.1-rc240
+Complete rc240 source ZIP SHA-256: 499e37e2a1b5a79b3243cef1177487c9ec89824ff9fba72aace983c9384040ea
+Recovered rc189 native baseline SHA-256: d1a91e2c53d9bb18472da91b28c5b92069dedfd70d8b2b41dc265c392936febf
+Earlier published release assets are unchanged. The owner confirmed the rc240 desktop icon is fixed.
+
+PRODUCT CHANGE
+
+The standalone release EXE, updater manifest asset_name, and portable EXE now use the same generic filename, YGODeckStudio.exe. The filename contains no application version or release candidate. Release tags and ZIP filenames retain their version to identify archives.
+
+The runtime installer continues replacing and restarting the actual running launcher path. Existing legacy or custom filenames are preserved, so current shortcuts are not broken by an automatic rename. New installations should keep YGODeckStudio.exe in a permanent writable folder. The launcher/updater runtime implementation is byte-for-byte unchanged from rc240, apart from the new build version. The verified compiled icon resource and source artwork are unchanged.
+
+PASSED CHECKS
+
+PASS - verified the complete published rc240 source ZIP and overlapping Git files
+PASS - verified the recovered native baseline and embedded compiler hashes
+PASS - JavaScript syntax for app.js and duel-core.js
+PASS - Go updater version comparison, including rc240 to rc241
+PASS - Go updater ETag/304, throttling, and error-state tests
+PASS - real stylesheet startup/periodic/focus update timers and restart guards
+PASS - real mouse Download with source CSS at 823 and 1280 pixels
+PASS - real mouse Download with packaged native CSS at 823 and 1280 pixels
+PASS - named-identity legality explanation regression
+PASS - shared Extra Monster Zone mapping and occupancy regression
+PASS - Xyz Material routing, detach semantics and final Chain regression
+PASS - visual Duel Log event/card click routing regression
+PASS - exact material auto-submit regression
+PASS - Windows amd64 GUI launcher compilation
+PASS - all seven linked icon resources match the preserved source ICO
+PASS - final generic-name candidate download, SHA-256, size, PE architecture, app identity and version validation
+PASS - final generic-name candidate revalidation returns the expected version-specific cache path
+PASS - a same-name previous-release cache file is preserved during download
+PASS - wrong application identity rejection
+PASS - full tested native core payload embedded in the launcher
+PASS - standalone EXE name equals manifest asset_name
+PASS - portable package contains exactly one EXE named YGODeckStudio.exe
+PASS - portable ZIP CRC and exact launcher byte identity
+PASS - complete source ZIP CRC
+
+EXECUTABLE
+
+File: YGODeckStudio.exe
+Size: 25642496 bytes
+SHA-256: 7c6037e05860b65d72970bc08adb6a1a8a73571b3140ef55004516bfe73cef97
+
+Source icon SHA-256: ee3f95fc914d37bf60832d7317b68ed36a885accd2a2415a876bee584a5a5aa9
+Linked resource object SHA-256: 57e5644fe425e5e8887731d364db1b1a7652113b392237d1e973cc6acff350e5
+Native core SHA-256: badc3672f0636a9ac53703d37332786a0a1b62a7ec0682c099f0000496a430fa
+
+update-manifest.json is generated from this exact executable. The portable ZIP contains YGO Deck Studio 3/YGODeckStudio.exe. The Source ZIP, manifest, validation report and checksums accompany the standalone EXE and portable ZIP.
+
+LIVE PUBLICATION CHECK
+
+This is the build-time report. After publication, compare all six uploaded asset sizes and SHA-256 digests, and run the unchanged rc240 updater source against the public feed. Verify rc241 discovery, the generic asset name, executable download/validation, HTTP 304 caching, and installed-rc241 up-to-date status. Those checks are separate from native Windows installation.
+
+OWNER TEST
+
+From rc240, save any deck changes, end active duels, select Check for Updates, Download, then Install and restart. Press F1 and confirm rc241. Launch again through the same desktop shortcut. Its existing target path should remain unchanged. Fresh standalone and portable installations use YGODeckStudio.exe.
+
+VALIDATION LIMITS
+
+This Linux environment cannot execute native Windows GUI launch, replace a running Windows launcher on NTFS, or verify restart, shortcut activation, visible-window health confirmation, or rollback. Windows shortcut persistence remains an owner test. Binaries remain unsigned.

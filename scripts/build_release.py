@@ -6,6 +6,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 VERSION_RE=re.compile(r'AppVersion\s*=\s*"([^"]+)"')
 APP_ID='com.techsavage1989.ygo-deck-studio'
+EXECUTABLE_NAME='YGODeckStudio.exe'
 
 def run(*args,env=None):
     print('+',' '.join(map(str,args)),flush=True)
@@ -52,7 +53,7 @@ def main():
         run('go','test','./launcher/updater')
         for t in ['tests/test_rc236_update_client_timers.py','tests/test_rc238_update_banner_clicks.py','tests/test_rc235_named_identity_legality_explanations.py','tests/test_rc234_shared_extra_monster_zones.py','tests/test_rc233_xyz_material_and_final_chain.py','tests/test_rc232_visual_log_click_routing.py','tests/test_rc230_exact_material_autosubmit.py']:
             run(sys.executable,ROOT/t)
-    asset_name=f'YGO_Deck_Studio_3_v{v}_Chat.exe';exe=out/asset_name
+    asset_name=EXECUTABLE_NAME;exe=out/asset_name
     env=os.environ.copy();env.update({'GOOS':'windows','GOARCH':'amd64','CGO_ENABLED':'0'})
     run('go','build','-trimpath','-ldflags=-H windowsgui','-o',exe,'./launcher',env=env)
     run(sys.executable,ROOT/'tools/validate_windows_icon.py',exe,ROOT/'web/assets/app_icon.ico')
@@ -64,11 +65,11 @@ def main():
     portable=out/f'YGO_Deck_Studio_3_v{v}_Portable_Chat.zip'
     with zipfile.ZipFile(portable,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
         z.writestr('YGO Deck Studio 3/',b'')
-        z.writestr('YGO Deck Studio 3/YGO Deck Studio 3.exe',exe.read_bytes())
+        z.writestr('YGO Deck Studio 3/'+EXECUTABLE_NAME,exe.read_bytes())
         for name in ['USER_MANUAL.txt','LEGAL_NOTICE.txt']:
             z.writestr('YGO Deck Studio 3/'+name,(ROOT/'docs'/name).read_bytes())
     with zipfile.ZipFile(portable) as z:
-        if z.testzip() is not None or z.read('YGO Deck Studio 3/YGO Deck Studio 3.exe')!=exe.read_bytes():
+        if z.testzip() is not None or z.read('YGO Deck Studio 3/'+EXECUTABLE_NAME)!=exe.read_bytes():
             raise SystemExit('Portable package integrity validation failed')
     source=out/f'YGO_Deck_Studio_3_v{v}_Source_Chat.zip';zip_tree(ROOT,source,f'YGO_Deck_Studio_3_v{v}_Source',exclude={'launcher/payload/YGODeckStudioCore.exe','dist','.git','.pytest_cache','tests/__pycache__','launcher/updater/__pycache__'})
     with zipfile.ZipFile(source) as z:

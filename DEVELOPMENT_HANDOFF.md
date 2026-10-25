@@ -2,17 +2,17 @@
 
 ## Latest version
 
-3.0.0-alpha.221-duelcore.1-rc240
+3.0.0-alpha.221-duelcore.1-rc241
 
-Previous published baseline: 3.0.0-alpha.221-duelcore.1-rc239. Native Windows installation and restart still require owner confirmation.
+Previous published baseline: 3.0.0-alpha.221-duelcore.1-rc240. The owner confirmed the rc240 desktop icon is fixed. Native Windows installation and restart are not inferred from icon confirmation.
 
 ## Source and repository state
 
 Repository: https://github.com/TechSavage1989/YDO-Deck-Studio
 
-Repository visibility: public. Git parent: 749445792005df0bfb1d0e576e1b78229ae080ff.
+Repository visibility: public. Git parent: bfdd322ea9babad795698f3262cf654451ba9727.
 
-The complete published rc239 Source ZIP was verified against SHA-256 1349f80784705c1e62155ec4a9a15073e29dbdd910425304385081b7809d7f1c before continuing. RC240 restores the original Windows application icon in the outer launcher. RC239 had no PE resource directory, which explains the generic desktop icon. The application still launched; no shortcut-target repair is needed for that symptom.
+The complete published rc240 Source ZIP was verified against SHA-256 499e37e2a1b5a79b3243cef1177487c9ec89824ff9fba72aace983c9384040ea before continuing. RC241 uses the generic public executable name YGODeckStudio.exe for standalone releases, updater assets, and portable packages. The installed EXE path is preserved during updates so existing shortcuts continue to work. The owner-confirmed rc240 embedded icon remains unchanged.
 
 The rc238 Download-button correction is retained. Available updates must not receive progress-only interaction restrictions. The existing real mouse regressions continue to load source and packaged native stylesheets at 823 and 1280 pixel viewport widths.
 
@@ -47,7 +47,7 @@ Release collection: GitHub Releases API for the repository. Draft releases are i
 Every application release intended for auto-update must contain:
 
 1. update-manifest.json
-2. the exact versioned Windows executable named by asset_name in the manifest
+2. the YGODeckStudio.exe Windows executable named by asset_name in the manifest
 3. checksums and normal release assets
 
 Manifest app_id must equal com.techsavage1989.ygo-deck-studio.
@@ -56,9 +56,11 @@ The launcher does not use GitHub credentials or embedded tokens. Public release 
 
 ## Stable executable and application data
 
-Portable launch filename: YGO Deck Studio 3.exe
+Stable public executable filename: YGODeckStudio.exe
 
-The updater always replaces the actual launcher path returned by Windows, so a user-renamed launcher is updated in place rather than forcing the default filename.
+The standalone asset, updater manifest asset_name, and portable EXE use YGODeckStudio.exe. Release tags and ZIP filenames retain the version for archive identification.
+
+The updater always replaces and restarts the actual launcher path returned by Windows. This preserves existing shortcuts, including installations using the old YGO Deck Studio 3.exe name, versioned filenames, or a user-chosen filename. Do not rename an existing target during installation or derive it from the downloaded asset basename. New installations should use the generic name in a permanent writable folder.
 
 Windows data root:
 
@@ -110,7 +112,7 @@ tools/validate_windows_icon.py reads the finished launcher PE resource tree and 
 
 ## Native validation status
 
-RC240 is built as a Windows amd64 GUI PE. The release build runs JavaScript syntax checks, Go updater tests, real mouse interactions against source and packaged CSS, focused duel regressions, linked icon resource validation, and validation of the generated candidate. The version comparison tests include the exact rc239 to rc240 transition. Portable ZIP CRC and launcher byte identity are checked during packaging. See DUELCORE_VALIDATION_alpha221_duelcore1_rc240.txt for the recorded results.
+RC241 is built as a Windows amd64 GUI PE. The release build runs JavaScript syntax checks, Go updater tests, real mouse interactions against source and packaged CSS, focused duel regressions, linked icon resource validation, and validation of the generated candidate. The version comparison tests include the exact rc240 to rc241 transition. Portable ZIP CRC and launcher byte identity are checked during packaging. See DUELCORE_VALIDATION_alpha221_duelcore1_rc241.txt for the recorded results.
 
 This Linux environment cannot execute the native Windows GUI or confirm running-launcher replacement, Windows restart, visible-window health confirmation, shortcuts, or rollback. Those checks remain pending the owner's Windows test.
 
@@ -124,13 +126,13 @@ The update helper is copied to per-user application data only for an explicit in
 
 ## Known release-state limitation at handoff
 
-RC239 is published. Its six uploaded assets matched the prepared sizes and server SHA-256 digests. The unchanged rc238 updater client discovered and downloaded rc239, including candidate integrity/identity/version validation, an HTTP 304 cache check, and an installed-rc239 up-to-date check. Native Windows replacement and desktop icon display remain owner checks.
+RC240 is published. Its six uploaded assets matched the prepared sizes and server SHA-256 digests. The unchanged rc239 updater client discovered and downloaded rc240, including candidate integrity/identity/version validation, an HTTP 304 cache check, and an installed-rc240 up-to-date check. The owner confirmed the desktop icon is fixed.
 
-RC240 uses tag v3.0.0-alpha.221-duelcore.1-rc240. Publish its matching manifest and executable together with the portable/source ZIPs, validation report, and checksums. After publication, verify all six server asset digests and run the unchanged rc239 updater client against the public feed to confirm rc240 discovery and download validation.
+RC241 uses tag v3.0.0-alpha.221-duelcore.1-rc241. Publish the generic YGODeckStudio.exe asset and its matching manifest with the portable/source ZIPs, validation report, and checksums. After publication, verify all six server asset digests and run the unchanged rc240 updater client against the public feed to confirm that it accepts and downloads the generic asset name.
 
-Owner test from rc239: use Check for Updates, select Download, then Install and restart after saving any deck and ending an active duel. Press F1 after restart and confirm rc240. Check the desktop shortcut image. If Windows keeps the generic cached image, refresh the desktop or open the shortcut properties and reselect its icon from the updated launcher EXE.
+Owner test from rc240: save work and end active duels, use Check for Updates, select Download, then Install and restart. Press F1 and confirm rc241. Launch the app again through the same desktop shortcut. Existing installed filenames should remain unchanged; new standalone and portable packages use YGODeckStudio.exe.
 
-For affected rc236/rc237 builds, Tab/Enter can activate Download once despite the old mouse-only CSS defect; alternatively use the latest portable package for manual launcher replacement. Do not infer Windows replacement, icon-cache refresh, or rollback success from feed/download tests.
+For affected rc236/rc237 builds, Tab/Enter can activate Download once despite the old mouse-only CSS defect; alternatively use the latest portable package for manual launcher replacement. Do not infer Windows replacement or rollback success from feed/download tests.
 
 ## Initial public source import
 
