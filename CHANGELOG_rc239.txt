@@ -1,0 +1,7 @@
+YGO Deck Studio 3 v3.0.0-alpha.221-duelcore.1-rc239
+
+- The Help button tooltip and accessible label now show the F1 keyboard shortcut.
+- Small pre-release for testing the rc238 to rc239 update path.
+- Retains the rc238 Download-button fix and explicit download, install, and restart controls.
+
+After updating, press F1 and confirm rc239 in Help. Hover over the Help button to see Help and About (F1).

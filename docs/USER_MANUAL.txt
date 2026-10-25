@@ -1,5 +1,5 @@
 YGO DECK STUDIO 3
-Version 3.0.0-alpha.221-duelcore.1-rc238
+Version 3.0.0-alpha.221-duelcore.1-rc239
 
 STARTING THE APPLICATION
 

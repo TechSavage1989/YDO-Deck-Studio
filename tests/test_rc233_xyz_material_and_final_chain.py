@@ -5,7 +5,7 @@ from playwright.sync_api import sync_playwright
 root=Path(__file__).resolve().parents[1]
 js_source=(root/'web/js/duel-core.js').read_text(encoding='utf-8')
 css=(root/'web/duel-core.css').read_text(encoding='utf-8')+'\n'+(root/'web/styles.css').read_text(encoding='utf-8')
-assert "duelcore.1-rc238" in js_source
+assert "duelcore.1-rc239" in js_source
 assert 'overlay_sequence' in js_source
 assert 'Attached Xyz Materials' in js_source
 assert "summary.links.size<1" in js_source

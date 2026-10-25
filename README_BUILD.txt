@@ -1,12 +1,12 @@
-YGO DECK STUDIO 3 RC238 - RECOVERED SOURCE AND BUILD PACKAGE
+YGO DECK STUDIO 3 RC239 - RECOVERED SOURCE AND BUILD PACKAGE
 
 PACKAGE STATUS
 
 The original native Go project source for the rc189 application shell was not recovered. This package contains the maintained browser source, the verified rc189 native baseline used for local builds, the reproducible embedded-web patcher, and the new source-controlled Windows launcher/updater.
 
-The preserved rc189 core remains authoritative for the native application shell and OCGCore integration. Browser-side changes through rc238 are under web/. The rc238 launcher adds the stable portable filename and safe GitHub Releases update path.
+The preserved rc189 core remains authoritative for the native application shell and OCGCore integration. Browser-side changes through rc239 are under web/. The rc239 launcher adds the stable portable filename and safe GitHub Releases update path.
 
-REBUILDING RC238
+REBUILDING RC239
 
 Windows:
   py -3 scripts\build_release.py --out dist

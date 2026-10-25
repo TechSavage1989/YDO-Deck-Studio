@@ -2,23 +2,21 @@
 
 ## Latest version
 
-3.0.0-alpha.221-duelcore.1-rc238
+3.0.0-alpha.221-duelcore.1-rc239
 
-Previous published baseline: 3.0.0-alpha.221-duelcore.1-rc237. The owner reported that the update is detected in rc236 but Download cannot be clicked. Native Windows install and restart confirmation is still pending.
+Previous published baseline: 3.0.0-alpha.221-duelcore.1-rc238. Native Windows installation and restart still require owner confirmation.
 
 ## Source and repository state
 
 Repository: https://github.com/TechSavage1989/YDO-Deck-Studio
 
-Repository visibility: public. Git parent: b49273ceff4d7df65deaf663174e7acb4b267f6f.
+Repository visibility: public. Git parent: eb8221227288204aaacc0ccf07277ee957fc2709.
 
-The complete published rc237 Source ZIP was verified against SHA-256 6d8ef75857cafba0ae516fff6633f4f6b503665852745301ad1b8d24122de703 before continuing. RC238 fixes the update banner's blocked Download mouse interaction. The version label added in rc237 is retained.
+The complete published rc238 Source ZIP was verified against SHA-256 540766a4966aa332acb49977935c44f5ff3e837575ab2a26a61b00f5dc710e0a before continuing. RC239 is a small update-test pre-release: the Help button tooltip and accessible label now include the F1 shortcut. The installed-version label remains visible in Help.
 
-Root cause: available updates received the is-progress class, whose stylesheet applied pointer-events:none to Download. The earlier isolated updater test omitted the stylesheet and therefore did not exercise the actual mouse hit target. Available updates no longer receive the progress class; dimmed button styling follows the actual disabled state.
+The rc238 Download-button correction is retained. Available updates must not receive progress-only interaction restrictions. The existing real mouse regressions continue to load source and packaged native stylesheets at 823 and 1280 pixel viewport widths.
 
-The new regression uses real mouse clicks with both the source stylesheet and the stylesheet extracted from the generated native core, at 823 and 1280 pixel viewport widths. The existing timer and restart-guard test now loads the full stylesheet. Keyboard Tab/Enter recovery was reproduced with the unfixed rc237 source and stylesheet before applying the fix.
-
-Use the versioned complete Source ZIP identified in SOURCE_SNAPSHOT.md for recovered binary assets and unchanged browser dependencies. Published rc236 and rc237 artifacts remain unchanged.
+Use the complete versioned Source ZIP identified in SOURCE_SNAPSHOT.md for recovered binary assets and unchanged dependencies. Published rc236, rc237, and rc238 artifacts remain unchanged.
 
 ## Architecture
 
@@ -106,11 +104,11 @@ The release builder:
 
 ## Native validation status
 
-RC238 is built as a Windows amd64 GUI PE. The release build runs JavaScript syntax checks, Go updater checks, focused Chromium regressions, real mouse interaction against source and packaged CSS, and validation of the generated candidate. Portable ZIP CRC and exact launcher byte identity are checked during packaging. See DUELCORE_VALIDATION_alpha221_duelcore1_rc238.txt for recorded results.
+RC239 is built as a Windows amd64 GUI PE. The release build runs JavaScript syntax checks, Go updater tests, real mouse interactions against source and packaged CSS, focused duel regressions, and validation of the generated candidate. The version comparison tests include the exact rc238 to rc239 transition. Portable ZIP CRC and launcher byte identity are checked during packaging. See DUELCORE_VALIDATION_alpha221_duelcore1_rc239.txt for the recorded results.
 
-This Linux environment cannot execute the native Windows GUI or verify actual running-launcher replacement, Windows restart, visible-window health confirmation, shortcuts, or rollback. Those native checks remain pending the owner's test.
+This Linux environment cannot execute the native Windows GUI or confirm running-launcher replacement, Windows restart, visible-window health confirmation, shortcuts, or rollback. Those checks remain pending the owner's Windows test.
 
-The repository workflow can run source checks without the recovered baseline. A tag workflow cannot build release artifacts unless the verified baseline is supplied. Publication of validated local artifacts is separate from hosted build status.
+The repository workflow can run source checks without the recovered baseline. A tag workflow cannot build release artifacts unless that verified baseline is supplied. Publication of validated local artifacts is separate from hosted build status.
 
 ## Security limitations
 
@@ -120,15 +118,13 @@ The update helper is copied to per-user application data only for an explicit in
 
 ## Known release-state limitation at handoff
 
-RC236 and RC237 are published. The original rc236 updater client successfully discovered rc237, fetched its manifest, downloaded and validated the executable, and reused the feed through HTTP 304. This validates the backend/feed path but did not validate the Windows application's mouse interaction.
+RC236, RC237, and RC238 are published. RC238's six uploaded assets matched the prepared sizes and server SHA-256 digests. Its live release was discovered and downloaded by the original updater client, including candidate integrity/identity/version validation and an HTTP 304 cache check.
 
-The owner supplied a screenshot from rc236 showing rc237 available and a dimmed Download button. The exact mouse blocker was reproduced with the real stylesheet, and Tab/Enter was verified to activate the affected Download button.
+RC239 uses tag v3.0.0-alpha.221-duelcore.1-rc239. Publish its matching manifest and executable together with the portable/source ZIPs, validation report, and checksums. After publication, verify all six server asset digests and run the unchanged rc238 updater client against the public feed to confirm rc239 discovery and download validation.
 
-RC238 uses tag v3.0.0-alpha.221-duelcore.1-rc238 and must be published with its matching manifest and executable. Verify all six uploaded assets and the public updater feed after publication.
+Owner test from rc238: use Check for Updates, select Download, then Install and restart after saving any deck and ending an active duel. Press F1 after restart and confirm rc239. Hover over Help to see Help and About (F1).
 
-Recovery from affected rc236/rc237: click Check again and wait until rc238 is shown, press Tab until Download is focused, then press Enter. Once download completes, choose Install and restart. Alternatively, close the app and replace the launcher from the rc238 portable package. Preserve the actual executable path and shortcut target. After restart, press F1 and confirm rc238 in Help.
-
-Do not claim native Windows replacement or rollback passed until the owner confirms it.
+For affected rc236/rc237 builds, Tab/Enter can activate Download once despite the old mouse-only CSS defect; alternatively use the latest portable package for manual launcher replacement. Do not infer Windows replacement or rollback success from feed/download tests.
 
 ## Initial public source import
 

@@ -1,0 +1,60 @@
+YGO DECK STUDIO 3
+RELEASE BUILD VALIDATION REPORT
+Version: v3.0.0-alpha.221-duelcore.1-rc239
+
+BASELINE
+
+Repository: https://github.com/TechSavage1989/YDO-Deck-Studio
+Git parent: eb8221227288204aaacc0ccf07277ee957fc2709
+Previous published baseline: v3.0.0-alpha.221-duelcore.1-rc238
+Complete rc238 source ZIP SHA-256: 540766a4966aa332acb49977935c44f5ff3e837575ab2a26a61b00f5dc710e0a
+Recovered rc189 native baseline SHA-256: d1a91e2c53d9bb18472da91b28c5b92069dedfd70d8b2b41dc265c392936febf
+Earlier published release artifacts are unchanged.
+
+SMALL PRODUCT CHANGE
+
+The Help button tooltip and accessible label now read Help and About (F1). The Help window displays the full rc239 version. The rc238 Download-button correction and existing explicit download/install/restart controls remain in place.
+
+PASSED CHECKS
+
+PASS - verified the complete published rc238 source snapshot before continuing
+PASS - verified the recovered rc189 native baseline and embedded compiler hashes before patching
+PASS - JavaScript syntax for app.js and duel-core.js
+PASS - Go updater version comparison, including the exact rc238 to rc239 transition
+PASS - Go updater ETag/304, throttling, and error-state tests
+PASS - real application stylesheet loaded in startup/periodic/focus update timer regression
+PASS - updater progress, unsaved-deck guard, active-duel guard, explicit install and error-state regression
+PASS - real mouse Download with source stylesheet at viewport widths 823 and 1280
+PASS - real mouse Download with packaged native stylesheet at viewport widths 823 and 1280
+PASS - named-identity legality explanation regression
+PASS - shared Extra Monster Zone mapping and occupancy regression
+PASS - Xyz Material routing, detach semantics and final Chain regression
+PASS - visual Duel Log event/card click routing regression
+PASS - exact material auto-submit regression
+PASS - Windows amd64 GUI launcher compilation
+PASS - exact built candidate download, SHA-256, size, PE architecture, identity and version validation
+PASS - wrong application identity rejection
+PASS - full tested native core payload embedded in the output launcher
+PASS - updated Help tooltip and accessible label present in the packaged native core
+PASS - portable archive CRC and exact stable-name launcher byte identity
+PASS - complete source archive CRC
+
+EXECUTABLE
+
+File: YGO_Deck_Studio_3_v3.0.0-alpha.221-duelcore.1-rc239_Chat.exe
+Size: 25501696 bytes
+SHA-256: 0a32d869eb961fe4efa4078ed3f2066b859b38044195ffbe5d08039c0c4ac3d7
+
+update-manifest.json is generated from this exact executable. The portable package uses YGO Deck Studio 3.exe. Source, validation report, manifest and checksums accompany the executable and portable package.
+
+LIVE PUBLICATION CHECK
+
+This is the build-time report. After publication, verify all six server asset digests and run the unchanged rc238 updater source against the public feed to confirm rc239 discovery and executable download/validation, then confirm rc239 reports up to date. Those checks are separate from native Windows installation.
+
+OWNER TEST
+
+In rc238, use Check for Updates, select Download, then Install and restart after saving any deck changes and ending any active duel. Press F1 after restart and confirm rc239. Hover over the Help button to see Help and About (F1).
+
+VALIDATION LIMITS
+
+This Linux environment cannot execute native Windows GUI launch, replace a running Windows launcher on NTFS, or verify Windows restart, visible-window health confirmation, shortcuts, or rollback. Those native checks remain pending owner confirmation. Binaries remain unsigned.
