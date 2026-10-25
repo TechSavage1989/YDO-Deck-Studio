@@ -1,0 +1,55 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23.x'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Source checks
+        run: |
+          node --check web/js/app.js
+          node --check web/js/duel-core.js
+          go test ./launcher/updater
+      - name: Full release build when recovered baseline is available
+        if: ${{ hashFiles('base/*.exe') != '' }}
+        run: python scripts/build_release.py --out dist
+      - uses: actions/upload-artifact@v4
+        if: ${{ hashFiles('dist/*') != '' }}
+        with:
+          name: ygo-deck-studio-${{ github.sha }}
+          path: dist/*
+          if-no-files-found: error
+      - name: Refuse tag release without build artifacts
+        if: startsWith(github.ref, 'refs/tags/v') && ${{ hashFiles('dist/*') == '' }}
+        run: |
+          echo "Release build requires the verified recovered rc189 baseline executable." >&2
+          exit 1
+      - name: Create immutable GitHub release
+        if: startsWith(github.ref, 'refs/tags/v') && ${{ hashFiles('dist/*') != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME}"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists; refusing to overwrite it." >&2
+            exit 1
+          fi
+          gh release create "$TAG" dist/* --repo "$GITHUB_REPOSITORY" --title "YGO Deck Studio $TAG" --prerelease --generate-notes
