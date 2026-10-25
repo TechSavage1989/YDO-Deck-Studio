@@ -21,11 +21,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - name: Source checks
+      - name: Launcher/updater source checks
+        run: go test ./launcher/updater
+      - name: Browser source checks
+        if: ${{ hashFiles('web/js/app.js', 'web/js/duel-core.js') != '' }}
         run: |
           node --check web/js/app.js
           node --check web/js/duel-core.js
-          go test ./launcher/updater
       - name: Full release build when recovered baseline is available
         if: ${{ hashFiles('base/*.exe') != '' }}
         run: python scripts/build_release.py --out dist
