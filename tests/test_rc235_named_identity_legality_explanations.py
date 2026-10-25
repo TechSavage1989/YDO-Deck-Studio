@@ -4,7 +4,7 @@ from playwright.sync_api import sync_playwright
 
 root = Path(__file__).resolve().parents[1]
 js_source = (root / 'web' / 'js' / 'duel-core.js').read_text(encoding='utf-8')
-assert "duelcore.1-rc237" in js_source
+assert "duelcore.1-rc238" in js_source
 assert "without changing legality" in js_source
 assert "directSelectionBody.append(x)" in js_source
 js = js_source.replace('export function ', 'function ').replace('export class ', 'class ') + '\nwindow.IntegratedDuelController=IntegratedDuelController;'

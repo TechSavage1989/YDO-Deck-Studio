@@ -1,0 +1,62 @@
+YGO DECK STUDIO 3
+RELEASE VALIDATION REPORT
+Version: v3.0.0-alpha.221-duelcore.1-rc238
+
+BASELINE
+
+Repository: https://github.com/TechSavage1989/YDO-Deck-Studio
+Git parent: b49273ceff4d7df65deaf663174e7acb4b267f6f
+Previous published release: rc237
+Verified complete rc237 source ZIP SHA-256: 6d8ef75857cafba0ae516fff6633f4f6b503665852745301ad1b8d24122de703
+Recovered native baseline SHA-256: d1a91e2c53d9bb18472da91b28c5b92069dedfd70d8b2b41dc265c392936febf
+Published rc236 and rc237 artifacts remain unchanged.
+
+REPORTED FAILURE AND FIX
+
+The owner supplied a screenshot from rc236 showing rc237 available but Download not clickable. The available state incorrectly received the is-progress CSS class, whose Download rule set pointer-events:none and reduced opacity. The earlier isolated updater browser test did not load this stylesheet and missed the mouse hit-target failure.
+
+RC238 applies progress state only while checking or downloading. Available updates remain actionable. Dimmed Download styling now follows the actual disabled attribute. The timer and restart-guard browser test loads the actual application stylesheet.
+
+A new regression tests normal mouse activation with both the full source stylesheet and the stylesheet extracted from the generated native core. It tests 823 and 1280 pixel viewport widths, the same available/cooldown-message combination shown in the screenshot, and verifies that Download generates exactly one service request without starting an installation.
+
+PASSED CHECKS
+
+PASS - verified rc237 source archive and recovered native baseline digests
+PASS - reproduced the blocked real mouse click in the unfixed rc237 source with its real stylesheet at both viewport widths
+PASS - keyboard Tab/Enter activates Download in that affected source at both viewport widths
+PASS - JavaScript syntax for app.js and duel-core.js
+PASS - Go updater version, ETag/304, throttle, and error-state tests
+PASS - real stylesheet loaded in startup/periodic/focus updater timer regression
+PASS - update progress, unsaved-deck guard, active-duel guard, explicit install, and error-state regression
+PASS - real mouse Download using source CSS at width 823
+PASS - real mouse Download using source CSS at width 1280
+PASS - real mouse Download using packaged native CSS at width 823
+PASS - real mouse Download using packaged native CSS at width 1280
+PASS - named-identity legality explanation regression
+PASS - shared Extra Monster Zone mapping and occupancy regression
+PASS - Xyz Material routing, detach semantics, and final Chain regression
+PASS - visual Duel Log event/card click routing regression
+PASS - exact material auto-submit regression
+PASS - Windows amd64 GUI launcher compilation
+PASS - generated candidate download, SHA-256, size, PE architecture, identity and version validation
+PASS - wrong application identity rejection
+PASS - portable ZIP CRC and exact embedded launcher byte identity
+PASS - complete source ZIP CRC verification
+
+ARTIFACT
+
+Executable: YGO_Deck_Studio_3_v3.0.0-alpha.221-duelcore.1-rc238_Chat.exe
+Size: 25501696 bytes
+SHA-256: c7d6a1bcb9a4aa287429d5310d8b13f0dfbff0900e4989fb5a9c7ea1c00baf7d
+
+The update manifest is generated from this exact executable. The portable launch filename remains YGO Deck Studio 3.exe. Source, manifest, validation and checksum assets accompany the executable and portable ZIP.
+
+RECOVERY FROM AFFECTED VERSIONS
+
+In rc236/rc237, refresh the update check and wait until rc238 is shown. Press Tab until Download is focused, then press Enter. Once downloaded, choose Install and restart. The keyboard action bypasses the mouse-only CSS defect. Alternatively, close the app and replace the launcher using the rc238 portable package. Keep the existing executable path and shortcut target. Press F1 after restart and confirm rc238 in Help.
+
+VALIDATION SCOPE
+
+This report records build-time results. After publication, verify all six server asset digests and run the original rc236 updater client against the public release feed to validate rc238 discovery and candidate download.
+
+This Linux environment cannot execute native Windows GUI launch, actual running-launcher replacement on NTFS, Windows restart, shortcut behavior, visible-window health confirmation, or rollback. Those native checks remain pending the owner's Windows test. Binaries remain unsigned.

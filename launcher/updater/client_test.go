@@ -18,7 +18,7 @@ func TestCompareVersions(t *testing.T) {
 	cases := []struct {
 		a, b string
 		want int
-	}{{"3.0.0-alpha.221-duelcore.1-rc235", "3.0.0-alpha.221-duelcore.1-rc237", -1}, {"3.0.0-alpha.221-duelcore.1-rc237", "3.0.0-alpha.221-duelcore.1-rc237", 0}, {"3.0.0", "3.0.0-alpha.221-duelcore.1-rc999", 1}}
+	}{{"3.0.0-alpha.221-duelcore.1-rc235", "3.0.0-alpha.221-duelcore.1-rc238", -1}, {"3.0.0-alpha.221-duelcore.1-rc238", "3.0.0-alpha.221-duelcore.1-rc238", 0}, {"3.0.0", "3.0.0-alpha.221-duelcore.1-rc999", 1}}
 	for _, tc := range cases {
 		got, err := CompareVersions(tc.a, tc.b)
 		if err != nil || got != tc.want {
@@ -40,8 +40,8 @@ func TestCheckUsesETagAndCachedRelease(t *testing.T) {
 			}
 			w.Header().Set("ETag", "etag-one")
 			json.NewEncoder(w).Encode([]map[string]any{{
-				"tag_name": "v3.0.0-alpha.221-duelcore.1-rc237",
-				"html_url": "https://github.com/TechSavage1989/YDO-Deck-Studio/releases/tag/v3.0.0-alpha.221-duelcore.1-rc237",
+				"tag_name": "v3.0.0-alpha.221-duelcore.1-rc238",
+				"html_url": "https://github.com/TechSavage1989/YDO-Deck-Studio/releases/tag/v3.0.0-alpha.221-duelcore.1-rc238",
 				"body":     "- first\n- second",
 				"assets": []map[string]any{
 					{"name": "update-manifest.json", "browser_download_url": server.URL + "/manifest", "size": 100},
@@ -49,7 +49,7 @@ func TestCheckUsesETagAndCachedRelease(t *testing.T) {
 				},
 			}})
 		case "/manifest":
-			json.NewEncoder(w).Encode(Manifest{Schema: 1, AppID: "com.techsavage1989.ygo-deck-studio", Version: "3.0.0-alpha.221-duelcore.1-rc237", Tag: "v3.0.0-alpha.221-duelcore.1-rc237", AssetName: "candidate.exe", SHA256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", Size: 123, Notes: []string{"First change", "Second change"}})
+			json.NewEncoder(w).Encode(Manifest{Schema: 1, AppID: "com.techsavage1989.ygo-deck-studio", Version: "3.0.0-alpha.221-duelcore.1-rc238", Tag: "v3.0.0-alpha.221-duelcore.1-rc238", AssetName: "candidate.exe", SHA256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", Size: 123, Notes: []string{"First change", "Second change"}})
 		default:
 			http.NotFound(w, r)
 		}
@@ -81,7 +81,7 @@ func TestRateLimitNeverReportsUpToDate(t *testing.T) {
 		w.WriteHeader(http.StatusTooManyRequests)
 	}))
 	defer server.Close()
-	c := NewClient("com.techsavage1989.ygo-deck-studio", "3.0.0-alpha.221-duelcore.1-rc237", "TechSavage1989", "YDO-Deck-Studio", t.TempDir())
+	c := NewClient("com.techsavage1989.ygo-deck-studio", "3.0.0-alpha.221-duelcore.1-rc238", "TechSavage1989", "YDO-Deck-Studio", t.TempDir())
 	c.APIBase = server.URL
 	c.HTTP = server.Client()
 	u, _ := url.Parse(server.URL)
@@ -110,7 +110,7 @@ func TestDownloadAndValidateBuiltCandidate(t *testing.T) {
 		switch r.URL.Path {
 		case "/repos/TechSavage1989/YDO-Deck-Studio/releases":
 			json.NewEncoder(w).Encode([]map[string]any{{
-				"tag_name": "v3.0.0-alpha.221-duelcore.1-rc237",
+				"tag_name": "v3.0.0-alpha.221-duelcore.1-rc238",
 				"html_url": "https://example.invalid/release",
 				"body":     "",
 				"assets": []map[string]any{
@@ -119,7 +119,7 @@ func TestDownloadAndValidateBuiltCandidate(t *testing.T) {
 				},
 			}})
 		case "/manifest":
-			json.NewEncoder(w).Encode(Manifest{Schema: 1, AppID: "com.techsavage1989.ygo-deck-studio", Version: "3.0.0-alpha.221-duelcore.1-rc237", Tag: "v3.0.0-alpha.221-duelcore.1-rc237", AssetName: "candidate.exe", SHA256: hash, Size: st.Size(), Notes: []string{"Updater test"}})
+			json.NewEncoder(w).Encode(Manifest{Schema: 1, AppID: "com.techsavage1989.ygo-deck-studio", Version: "3.0.0-alpha.221-duelcore.1-rc238", Tag: "v3.0.0-alpha.221-duelcore.1-rc238", AssetName: "candidate.exe", SHA256: hash, Size: st.Size(), Notes: []string{"Updater test"}})
 		case "/candidate.exe":
 			http.ServeFile(w, r, candidate)
 		default:
@@ -159,7 +159,7 @@ func TestWrongIdentityCandidateRejected(t *testing.T) {
 	sum := sha256.Sum256(b)
 	hash := hex.EncodeToString(sum[:])
 	st, _ := os.Stat(candidate)
-	ok, err := validateFile(candidate, hash, st.Size(), "wrong.app.id", "3.0.0-alpha.221-duelcore.1-rc237")
+	ok, err := validateFile(candidate, hash, st.Size(), "wrong.app.id", "3.0.0-alpha.221-duelcore.1-rc238")
 	if ok || err == nil {
 		t.Fatal("wrong identity candidate was accepted")
 	}

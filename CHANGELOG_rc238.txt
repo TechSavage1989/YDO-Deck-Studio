@@ -1,0 +1,9 @@
+YGO Deck Studio 3 v3.0.0-alpha.221-duelcore.1-rc238
+
+- Fixed the Download button being blocked by progress styling while an update was available.
+- Update-available banners no longer use the download-in-progress state, and dimmed button styling now follows the actual disabled state.
+- Added real mouse-click regressions using both the full application stylesheet and the stylesheet embedded in the packaged native core.
+
+The existing updater timer and restart-guard test now loads the real app stylesheet. Portable archives are written directly from the verified executable and checked for CRC and identical launcher bytes before publication.
+
+For affected rc236 or rc237 builds, refresh the update check, press Tab until Download is focused, then press Enter. Keyboard activation bypasses the mouse-only styling defect. After download, choose Install and restart. Alternatively, close the app and manually replace its launcher using the rc238 portable package.

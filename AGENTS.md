@@ -2,7 +2,7 @@
 
 ## Current baseline
 
-The current development baseline is 3.0.0-alpha.221-duelcore.1-rc237.
+The current development baseline is 3.0.0-alpha.221-duelcore.1-rc238.
 
 This project is a recovered-source continuation. The original native Go source for the rc189 application shell was not available. The current browser entry points, launcher/updater, tests, and release handoff are maintained in Git. The complete recovered-source tree, including web dependencies, artwork, and the verified rc189 native baseline, is distributed in the versioned Source ZIP identified in SOURCE_SNAPSHOT.md. Use that complete snapshot together with newer confirmed Git changes; do not reconstruct missing files from older revisions. tools/patch_embedded_web.py patches the maintained browser assets into the verified rc189 native baseline before the launcher embeds that core executable.
 
@@ -53,6 +53,7 @@ Run at minimum:
 - node --check web/js/duel-core.js
 - go test ./launcher/updater
 - python tests/test_rc236_update_client_timers.py
+- python tests/test_rc238_update_banner_clicks.py (loads source and packaged stylesheets; real mouse clicks only)
 - current targeted duel-selection, Xyz-material, shared-EMZ, visual-log, and named-identity regressions
 
 The release builder runs the current focused set automatically.

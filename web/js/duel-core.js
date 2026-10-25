@@ -1,4 +1,4 @@
-const DUEL_BRANCH = 'duelcore.1-rc237';
+const DUEL_BRANCH = 'duelcore.1-rc238';
 
 
 
