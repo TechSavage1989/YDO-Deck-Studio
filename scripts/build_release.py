@@ -3,6 +3,9 @@ from __future__ import annotations
 import argparse, hashlib, json, os, re, shutil, subprocess, sys, zipfile
 from pathlib import Path
 
+from check_layout import check
+check()
+
 ROOT=Path(__file__).resolve().parents[1]
 VERSION_RE=re.compile(r'AppVersion\s*=\s*"([^"]+)"')
 APP_ID='com.techsavage1989.ygo-deck-studio'
@@ -25,7 +28,7 @@ def version()->str:
 
 def notes()->list[str]:
     rc=version().rsplit('rc',1)[-1]
-    p=ROOT/f'CHANGELOG_rc{rc}.txt'
+    p=ROOT/f'docs/releases/CHANGELOG_rc{rc}.txt'
     if not p.exists(): return []
     out=[]
     for line in p.read_text(encoding='utf-8').splitlines():
@@ -74,7 +77,7 @@ def main():
     source=out/f'YGO_Deck_Studio_3_v{v}_Source_Chat.zip';zip_tree(ROOT,source,f'YGO_Deck_Studio_3_v{v}_Source',exclude={'launcher/payload/YGODeckStudioCore.exe','dist','.git','.pytest_cache','tests/__pycache__','launcher/updater/__pycache__'})
     with zipfile.ZipFile(source) as z:
         if z.testzip() is not None: raise SystemExit('Source package CRC validation failed')
-    validation=ROOT/f'DUELCORE_VALIDATION_alpha221_duelcore1_rc{rc}.txt'
+    validation=ROOT/f'docs/validation/DUELCORE_VALIDATION_alpha221_duelcore1_rc{rc}.txt'
     if validation.exists(): shutil.copy2(validation,out/validation.name)
     sums=[]
     for p in [exe,portable,source,out/'update-manifest.json']+([out/validation.name] if validation.exists() else []): sums.append(f'{sha256(p)}  {p.name}')

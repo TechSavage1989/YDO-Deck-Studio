@@ -4,7 +4,7 @@
 
 The current development baseline is 3.0.0-alpha.221-duelcore.1-rc241.
 
-This project is a recovered-source continuation. The original native Go source for the rc189 application shell was not available. The current browser entry points, launcher/updater, tests, and release handoff are maintained in Git. The complete recovered-source tree, including web dependencies, artwork, and the verified rc189 native baseline, is distributed in the versioned Source ZIP identified in SOURCE_SNAPSHOT.md. Use that complete snapshot together with newer confirmed Git changes; do not reconstruct missing files from older revisions. tools/patch_embedded_web.py patches the maintained browser assets into the verified rc189 native baseline before the launcher embeds that core executable.
+This project is a recovered-source continuation. The original native Go source for the rc189 application shell was not available. The current browser entry points, launcher/updater, tests, and release handoff are maintained in Git. The complete recovered-source tree, including web dependencies, artwork, and the verified rc189 native baseline, is distributed in the versioned Source ZIP identified in docs/SOURCE_SNAPSHOT.md. Use that complete snapshot together with newer confirmed Git changes; do not reconstruct missing files from older revisions. tools/patch_embedded_web.py patches the maintained browser assets into the verified rc189 native baseline before the launcher embeds that core executable.
 
 Do not replace the recovered native baseline or reconstruct duel-engine behavior unless the project owner explicitly requests it.
 
@@ -96,3 +96,7 @@ Do not persist updater downloads, caches, staging files, or settings beside the 
 Preserve working deck editor, duel simulator, settings, visual design, rules integration, visual Duel Log, attack effects/audio, Direct Hand/Field selection, Xyz-material handling, shared Extra Monster Zone mapping, and existing user data unless a requested change requires otherwise.
 
 OCGCore remains authoritative for duel legality. UI work must not silently override engine candidate lists or rules decisions.
+
+## Repository layout contract
+
+Keep the root limited to the entries in `scripts/check_layout.py`. Put implementation in the existing source directories, tests in `tests/`, automation in `scripts/` or `tools/`, and longer documentation/evidence in `docs/`. Do not add generated builds, logs, dependency trees, or versioned notes to the root. Any deliberate layout change must update the guard, all build/test/package path consumers, and this handoff in the same change. Run `python scripts/check_layout.py` before committing; CI and packaging enforce it. Preserve public executable/DLL/archive names and update endpoints.

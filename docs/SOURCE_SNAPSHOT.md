@@ -22,3 +22,13 @@ RC241 continues from the published rc240 source asset:
 - Recovered native baseline SHA-256: d1a91e2c53d9bb18472da91b28c5b92069dedfd70d8b2b41dc265c392936febf
 
 Earlier published artifacts remain unchanged. RC241 makes the public executable filename YGODeckStudio.exe across standalone downloads, the updater manifest, and portable packages. Existing installed paths are preserved during updates. RC240's desktop icon fix was confirmed by the owner and remains linked at compilation. The rc238 Download-button interaction fix is preserved.
+
+## Preparing the reorganized checkout
+
+Download the rc241 Source ZIP above and run from a clean Git checkout:
+
+```text
+python scripts/prepare_recovered_source.py --snapshot /path/to/rc241-Source.zip --out /path/to/new-build-tree
+```
+
+The helper pins the published ZIP and native baseline SHA-256, groups historical root notes/wrappers, and overlays the current tracked Git inventory. It refuses an existing destination. Build from that new tree; do not copy an older ZIP over the current checkout or retain the old root documentation copies. The extracted output contains full unchanged dependencies/artwork/baseline and the new layout. Historical published packages remain untouched.

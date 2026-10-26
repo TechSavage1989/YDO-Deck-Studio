@@ -1,6 +1,6 @@
 @echo off
 setlocal
-cd /d "%~dp0"
+cd /d "%~dp0..\.."
 py -3 scripts\build_release.py --out dist
 if errorlevel 1 (
   echo.

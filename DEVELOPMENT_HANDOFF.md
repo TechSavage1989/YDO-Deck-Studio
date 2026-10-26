@@ -16,7 +16,7 @@ The complete published rc240 Source ZIP was verified against SHA-256 499e37e2a1b
 
 The rc238 Download-button correction is retained. Available updates must not receive progress-only interaction restrictions. The existing real mouse regressions continue to load source and packaged native stylesheets at 823 and 1280 pixel viewport widths.
 
-Use the complete versioned Source ZIP identified in SOURCE_SNAPSHOT.md for recovered binary assets and unchanged dependencies. Published rc236, rc237, and rc238 artifacts remain unchanged.
+Use the complete versioned Source ZIP identified in docs/SOURCE_SNAPSHOT.md for recovered binary assets and unchanged dependencies. Published rc236, rc237, and rc238 artifacts remain unchanged.
 
 ## Architecture
 
@@ -112,7 +112,7 @@ tools/validate_windows_icon.py reads the finished launcher PE resource tree and 
 
 ## Native validation status
 
-RC241 is built as a Windows amd64 GUI PE. The release build runs JavaScript syntax checks, Go updater tests, real mouse interactions against source and packaged CSS, focused duel regressions, linked icon resource validation, and validation of the generated candidate. The version comparison tests include the exact rc240 to rc241 transition. Portable ZIP CRC and launcher byte identity are checked during packaging. See DUELCORE_VALIDATION_alpha221_duelcore1_rc241.txt for the recorded results.
+RC241 is built as a Windows amd64 GUI PE. The release build runs JavaScript syntax checks, Go updater tests, real mouse interactions against source and packaged CSS, focused duel regressions, linked icon resource validation, and validation of the generated candidate. The version comparison tests include the exact rc240 to rc241 transition. Portable ZIP CRC and launcher byte identity are checked during packaging. See docs/validation/DUELCORE_VALIDATION_alpha221_duelcore1_rc241.txt for the recorded results.
 
 This Linux environment cannot execute the native Windows GUI or confirm running-launcher replacement, Windows restart, visible-window health confirmation, shortcuts, or rollback. Those checks remain pending the owner's Windows test.
 
@@ -147,3 +147,7 @@ The current Git branch is authoritative for project ownership, versions, changed
 Python browser test dependencies are listed in requirements-dev.txt. Install them and run python -m playwright install chromium before building. The focused tests use Playwright's installed Chromium instead of a fixed Linux-only browser path.
 
 For an existing Chromium installation, set YGO_CHROMIUM_EXECUTABLE to its full executable path before running the build or focused browser tests.
+
+## Repository organization — 2026-10-26
+
+Documentation and historical build wrappers are grouped under docs/ and scripts/history/ where applicable. Current source architecture and release artifact names are preserved. `scripts/check_layout.py` enforces the root contract in CI and build/package entry points, including extracted source archives. This is organization-only: no application version, updater behavior, media safety policy, published tag or release asset changes.

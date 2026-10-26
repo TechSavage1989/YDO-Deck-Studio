@@ -79,9 +79,9 @@ Read [AGENTS.md](AGENTS.md) and [DEVELOPMENT_HANDOFF.md](DEVELOPMENT_HANDOFF.md)
 
 The original native Go source for the rc189 application shell was not recovered. The maintained browser assets are patched into its verified native baseline, then embedded by the source-controlled Windows launcher. Do not substitute an unverified executable or reconstruct missing native behavior.
 
-Git contains current browser entry points, launcher/updater, tests, build scripts, and handoff documentation. Start with the complete versioned **Source ZIP identified in [SOURCE_SNAPSHOT.md](SOURCE_SNAPSHOT.md)** for unchanged web dependencies, artwork, and the recovered native baseline, then apply newer confirmed Git changes. Verify the baseline against [base/BASELINE_SHA256.txt](base/BASELINE_SHA256.txt); it is intentionally excluded from Git.
+Git contains current browser entry points, launcher/updater, tests, build scripts, and handoff documentation. Start with the complete versioned **Source ZIP identified in [docs/SOURCE_SNAPSHOT.md](docs/SOURCE_SNAPSHOT.md)** for unchanged web dependencies, artwork, and the recovered native baseline, then apply newer confirmed Git changes. Verify the baseline against [base/BASELINE_SHA256.txt](base/BASELINE_SHA256.txt); it is intentionally excluded from Git.
 
-Use Go, Python, Node.js, and the Python browser-test dependencies in `requirements-dev.txt`. Install Playwright Chromium before the focused tests. See [README_BUILD.txt](README_BUILD.txt) and the handoff for the complete build workflow.
+Use Go, Python, Node.js, and the Python browser-test dependencies in `requirements-dev.txt`. Install Playwright Chromium before the focused tests. See [docs/README_BUILD.txt](docs/README_BUILD.txt) and the handoff for the complete build workflow.
 
 ```text
 # Windows
