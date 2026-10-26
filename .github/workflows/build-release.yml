@@ -43,6 +43,8 @@ jobs:
       - name: Full release build when recovered baseline is available
         if: ${{ hashFiles('base/*.exe') != '' }}
         run: python scripts/build_release.py --out dist
+      - name: Rebuild extracted complete Source ZIP
+        run: python scripts/check_source_package.py
       - uses: actions/upload-artifact@v4
         if: ${{ hashFiles('dist/*') != '' }}
         with:
