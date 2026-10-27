@@ -23,8 +23,8 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/TechSavage1989/YDO-Deck-Studio/launcher/payload"
-	"github.com/TechSavage1989/YDO-Deck-Studio/launcher/updater"
+	"github.com/TechSavage1989/YGO-Deck-Studio/launcher/payload"
+	"github.com/TechSavage1989/YGO-Deck-Studio/launcher/updater"
 )
 
 const baseUpdatePort = 49357

@@ -37,7 +37,7 @@ jobs:
       - name: Prepare verified recovered source with current checkout
         if: ${{ hashFiles('base/*.exe') == '' }}
         run: |
-          curl --fail --location --retry 3 --output "$RUNNER_TEMP/rc241-source.zip" "https://github.com/TechSavage1989/YDO-Deck-Studio/releases/download/v3.0.0-alpha.221-duelcore.1-rc241/YGO_Deck_Studio_3_v3.0.0-alpha.221-duelcore.1-rc241_Source_Chat.zip"
+          curl --fail --location --retry 3 --output "$RUNNER_TEMP/rc241-source.zip" "https://github.com/TechSavage1989/YGO-Deck-Studio/releases/download/v3.0.0-alpha.221-duelcore.1-rc241/YGO_Deck_Studio_3_v3.0.0-alpha.221-duelcore.1-rc241_Source_Chat.zip"
           python scripts/prepare_recovered_source.py --snapshot "$RUNNER_TEMP/rc241-source.zip" --out "$RUNNER_TEMP/ygo-complete"
           python "$RUNNER_TEMP/ygo-complete/scripts/build_release.py" --out "$GITHUB_WORKSPACE/dist"
       - name: Full release build when recovered baseline is available

@@ -10,7 +10,7 @@ Do not replace the recovered native baseline or reconstruct duel-engine behavior
 
 ## Repository and release feed
 
-Repository: https://github.com/TechSavage1989/YDO-Deck-Studio
+Repository: https://github.com/TechSavage1989/YGO-Deck-Studio
 
 Expected release feed: GitHub Releases from the same repository.
 

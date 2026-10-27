@@ -43,7 +43,7 @@ Regeneration uses github.com/akavel/rsrc pinned to v0.10.2 and may download that
 UPDATE FEED
 
 Repository:
-  https://github.com/TechSavage1989/YDO-Deck-Studio
+  https://github.com/TechSavage1989/YGO-Deck-Studio
 
 Expected feed:
   GitHub Releases from the same repository.

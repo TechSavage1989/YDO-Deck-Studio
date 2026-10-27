@@ -8,7 +8,7 @@ Previous published baseline: 3.0.0-alpha.221-duelcore.1-rc240. The owner confirm
 
 ## Source and repository state
 
-Repository: https://github.com/TechSavage1989/YDO-Deck-Studio
+Repository: https://github.com/TechSavage1989/YGO-Deck-Studio
 
 Repository visibility: public. Git parent: bfdd322ea9babad795698f3262cf654451ba9727.
 
@@ -40,7 +40,7 @@ The existing browser application owns update scheduling and presentation. It che
 
 ## Release/update feed contract
 
-Repository owner/name: TechSavage1989/YDO-Deck-Studio
+Repository owner/name: TechSavage1989/YGO-Deck-Studio
 
 Release collection: GitHub Releases API for the repository. Draft releases are ignored. Pre-release releases are supported.
 
@@ -151,3 +151,15 @@ For an existing Chromium installation, set YGO_CHROMIUM_EXECUTABLE to its full e
 ## Repository organization — 2026-10-26
 
 Documentation and historical build wrappers are grouped under docs/ and scripts/history/ where applicable. Current source architecture and release artifact names are preserved. `scripts/check_layout.py` enforces the root contract in CI and build/package entry points, including extracted source archives. This is organization-only: no application version, updater behavior, media safety policy, published tag or release asset changes.
+
+## Repository spelling correction — 2026-10-27
+
+The owner renamed `TechSavage1989/YDO-Deck-Studio` to `TechSavage1989/YGO-Deck-Studio`. Repository ID `1432770484`, public visibility, existing history, and all six releases/36 assets were retained. Release IDs and asset IDs, filenames, sizes, and SHA-256 digests matched the pre-rename inventory. RC241 remains the current published version; no new tag or release was created for this correction.
+
+Current README, build workflow, Go module/imports, launcher feed setting, and maintained handoff references use the corrected name. Historical validation records and published Source ZIPs retain their original URLs intentionally. Do not rewrite published release artifacts. Existing local clones can use `git remote set-url origin https://github.com/TechSavage1989/YGO-Deck-Studio.git`.
+
+Installed launchers still use `YDO-Deck-Studio`. The existing rc240/rc241 updater implementation was tested unchanged with that legacy name against the live service: the release API returned a 301 to `/repositories/1432770484/releases`, the client found rc241, downloaded and validated its executable, reused the ETag through a 304 response, and reported an installed rc241 as up to date. The canonical name also passed feed/cache checks. The old manifest and executable download URLs still redirected successfully; downloaded bytes matched the published hashes. No redirect-host checks were weakened. Regression tests cover both repository names, redirected manifests, ETag caching, and rejection of unsafe redirect hosts.
+
+[GitHub documents repository redirects](https://docs.github.com/en/repositories/creating-and-managing-repositories/renaming-a-repository). **Never recreate a repository under the old `YDO-Deck-Studio` name:** doing so would break the redirects used by installed applications. A new application build is not needed solely for the rename.
+
+Local validation passed: repository layout, JavaScript syntax, all updater Go tests (including the existing rc241 executable candidate), `go vet`, and the live feed/download checks above. Local Chromium regression launch was blocked by the execution sandbox, so those browser checks remain for hosted CI. Native Windows installation, restart, shortcut behavior, and rollback were not exercised by this rename verification.
